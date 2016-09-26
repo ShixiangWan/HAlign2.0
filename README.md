@@ -27,6 +27,7 @@ hadoop jar MSA2.0.jar <input_file> <output_file> <dfs_path> <algorithm type>
   * input_file/output_file/algorithm type：与单机使用相同；
   * dfs_path：Hadoop集群DFS（分布式文件系统）中存放实验文件的路径。
 
+  
 ##更新日志
 * 2016-09-07, version 0.1:
   * 完成基本功能。
