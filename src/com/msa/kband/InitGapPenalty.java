@@ -1,11 +1,11 @@
 package com.msa.kband;
 
-//帮助Generate类的完成
+//Helps the completion of the Generate class
 class InitGapPenalty {
     private int[][] a,b,c,p;
     private int h,g,k;
 
-    //abcp初始化
+    //Abcp initialization
     InitGapPenalty(int g, int h) {
         a=AffineGapPenalty.a;
         b=AffineGapPenalty.b;

@@ -21,16 +21,17 @@ import com.msa.utils.ClearDfsPath;
 import com.msa.utils.CopyFile;
 
 public class ExtremeMSA {
-	private String filepath = ""; // 记录文件名称
-	private static String Pi[]; // 记录每一个序列
-	private static String Piname[]; // 记录每一个序列的名字
-	private int Spaceevery[][]; // 存放中心序列分别与其他序列比对时增加的空格的位置
-	private int Spaceother[][]; // 存放其他序列与中心序列比对时增加的空格的位置
-	private int n; // 存放序列个数
-	private int center; // 存放中心序列编号
-	private int spacescore = -1;
-	private int Name[][][][]; // 树搜索完，记录匹配的区域;四维数组，第一位是Pi[i],第二位是pi[j]，记录两个序列的标号，第3维是3，Name[i][j][0][k]记录的是Pi[i]中的起始位置
-
+	private String filepath = ""; // record file name
+	private static String Pi[]; // record each sequence
+	private static String Piname[];// record the name of each sequence
+	private int Spaceevery[][];// The location of the added space when the center sequences are aligned with other sequences, respectively
+	private int Spaceother[][];// where additional spaces are added when comparing other sequences with the center sequence
+	private int n;// storage sequence number
+	private int center;// storage center sequence number
+	private int spacescore = -1;// ########### Define the match, mismatch, and space penalty ########### ####
+	private int Name[][][][];
+	
+	
 	public void start(String inputfile, String outputfile, String outputDFS) 
 			throws IOException, ClassNotFoundException, InterruptedException {
         filepath = inputfile;
@@ -61,8 +62,10 @@ public class ExtremeMSA {
 		}
 		
 		center = centerAlignEachOne();
-		Spaceevery = new int[n][Pi[center].length() + 1];// 存放中心序列分别与其他序列比对时增加的空格的位置
-        Spaceother = new int[n][computeMaxLength(center) + 1];// 存放其他序列与中心序列比对时增加的空格的位置
+		// The position of the added space when the center sequences are aligned with other sequences, respectively
+		Spaceevery = new int[n][Pi[center].length() + 1];
+		// where additional spaces are added when comparing other sequences with central sequences
+        Spaceother = new int[n][computeMaxLength(center) + 1];
         for (int i = 0; i < n; i++) {
             if (i == center)
                 continue;
@@ -76,63 +79,60 @@ public class ExtremeMSA {
         output(Space, outputfile);
 	}
 
-    // 比对Pi[i]与中心序列有重合的前端
+	// align Pi[i] with the center sequence coincides with the frontier part
     private void prealign(int i) {
         String strC = Pi[center].substring(0, Name[center][i][0][0]);
         String stri = Pi[i].substring(0, Name[center][i][1][0]);
-        int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
-        traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);// 回溯，更改空格数组
+        int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
+        traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);
     }
 
-    // 比对Pi[i]与中心序列有重合的中间部分
+    //align Pi[i] with the center sequence coincides with the middle part
     private void midalign(int i, int j) {
         int lamda = Math.max(Name[center][i][1][j - 1] + Name[center][i][2][j - 1] - Name[center][i][1][j],
                 Name[center][i][0][j - 1] + Name[center][i][2][j - 1] - Name[center][i][0][j]);
-        // lamda是为了防止前后两块完全匹配有覆盖，把覆盖部分删除
         if (lamda > 0) {
             Name[center][i][0][j] += lamda;
             Name[center][i][1][j] += lamda;
             Name[center][i][2][j] -= lamda;
         }
-        if (Name[center][i][2][j] < 0)
-            System.out.println("此处有错误！！！！");
+        if (Name[center][i][2][j] < 0) System.out.println("Error");
 
-        String strC = Pi[center].substring(Name[center][i][0][j - 1] + Name[center][i][2][j - 1],
-                Name[center][i][0][j]);// 此处有漏洞，如果Name[center][i][0][0]=0，会抱错
+        String strC = Pi[center].substring(Name[center][i][0][j - 1] + Name[center][i][2][j - 1], Name[center][i][0][j]);
 
         String stri = Pi[i].substring(Name[center][i][1][j - 1] + Name[center][i][2][j - 1], Name[center][i][1][j]);
 
-        int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
+        int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
         traceBackForDynamicProgram(M, stri.length(), strC.length(), i,
                 Name[center][i][1][j - 1] + Name[center][i][2][j - 1],
                 Name[center][i][0][j - 1] + Name[center][i][2][j - 1]);
 
     }
 
-    // 比对Pi[i]与中心序列有重合的后端
+    // align Pi[i] with the center sequence coincides with the back part
     private void postalign(int i) {
         int j = Name[center][i][0].length;
         if (j > 0) {
             int cstart = Name[center][i][0][j - 1] + Name[center][i][2][j - 1];
             if (cstart > Pi[center].length())
-                cstart--;// 别忘了，建后缀树时加了个$
+                cstart--; // Do not forget to add a $ when you build the suffix tree
             int istart = Name[center][i][1][j - 1] + Name[center][i][2][j - 1];
             if (istart > Pi[i].length())
                 istart--;
 
             String strC = Pi[center].substring(cstart);
             String stri = Pi[i].substring(Name[center][i][1][j - 1] + Name[center][i][2][j - 1]);
-            int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
+            int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
             traceBackForDynamicProgram(M, stri.length(), strC.length(), i,istart,cstart);
         } else {
             String strC = Pi[center];
             String stri = Pi[i];
-            int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
+            int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
             traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);
         }
     }
 
-	// 计算序列个数
+    // Calculate the number of sequences
 	public int countnum() {
 		int num = 0;
 		try {
@@ -150,7 +150,7 @@ public class ExtremeMSA {
 		return (num);
 	}
 
-	// 将序列一次读入数组中
+	// The sequence is read into the array once
 	public void input() {
 		Pi = new String[n];
 		Piname = new String[n];
@@ -181,7 +181,8 @@ public class ExtremeMSA {
 	}
 
 	/**
-	 * 对String格式化,删除非法字符(只保留agctn,其余字符全部替换成n),全部转换成小写,u全部换成t
+	 * String formatting, delete illegal characters (only retain agctn, 
+	 * all the rest of the characters replaced by n), all converted to lowercase, u all replaced by t
 	 */
     private String format(String s) {
         s = s.toLowerCase();
@@ -208,14 +209,13 @@ public class ExtremeMSA {
     }
 
 	public int centerAlignEachOne() {
-		Name = new int[n][n][3][]; // 用来存放出现的名字，Name[i][j][0][k]和Name[i][j][1][k]表示了Pi[i]序列的第Name[i][j][0][k]个片段出现在Pi[j]序列的Name[i][j][1][k]位置上
+		Name = new int[n][n][3][];
 		SuffixTree st1 = new SuffixTree();
 		st1.build(Pi[0] + "$");
 		for (int j = 1; j < n; j++) {
 			int index = 0;
 			ArrayList<Integer> result = new ArrayList<>();
             while (index < Pi[j].length()) {
-                //在Pi[j]序列中，从index位置开始的序列段与Pi[0]进行匹配，返回Pi[0]中从a[0]开始的长度为a[1]的序列索引
                 int[] a = st1.selectPrefixForAlignment(Pi[j], index);
                 if (a[1] > Math.abs(a[0] - index)) {
                     result.add(a[0]);
@@ -244,21 +244,20 @@ public class ExtremeMSA {
 		return (0);
 	}
 
-	// 在动态规划中计算矩阵积分
+	// Matrix integration is calculated in dynamic programming
 	public int[][] computeScoreMatrixForDynamicProgram(String stri, String strC) {
 		int len1 = stri.length() + 1;
 		int len2 = strC.length() + 1;
-		int M[][] = new int[len1][len2]; // 定义动态规划矩阵
-		// ---初始化动态规划矩阵-----------
+		int M[][] = new int[len1][len2];
+		// Initializes the dynamic programming matrix
 		int p, q;
 		for (p = 0; p < len1; p++)
 			M[p][0] = spacescore * p;
 		for (q = 0; q < len2; q++)
 			M[0][q] = spacescore * q;
-		// ---初始化结束----------
-		// ----计算矩阵的值------------
+		// Calculate the value of the matrix
 		for (p = 1; p < len1; p++)
-			for (q = 1; q < len2; q++) {// M[p][q]=max(M[p-1][q]-1,M[p][q-1]-1,M[p-1][q-1]+h)
+			for (q = 1; q < len2; q++) {
 				int h;
 				int matchscore = 0;
 				int mismatchscore = -1;
@@ -271,7 +270,7 @@ public class ExtremeMSA {
 		return (M);
 	}
 
-	// 在动态规划中回溯
+	// Backtracking in Dynamic Programming
 	private void traceBackForDynamicProgram(int[][] M, int p, int q, int i, int k1, int k2) {
 		while (p > 0 && q > 0) {
 			if (M[p][q] == M[p][q - 1] + spacescore) {
@@ -298,7 +297,7 @@ public class ExtremeMSA {
 	}
 
 	private int[] combine() {
-		int Space[] = new int[Pi[center].length() + 1];// 该数组用来记录在P[center]的最终结果各个空隙间插入空格的个数
+		int Space[] = new int[Pi[center].length() + 1];
 		int i, j;
 		for (i = 0; i < Pi[center].length() + 1; i++) {
 			int max = 0;
@@ -310,7 +309,7 @@ public class ExtremeMSA {
 		return (Space);
 	}
 
-	// 计算除中心序列以外的其他序列的最大长度
+	// The maximum length of the sequence other than the central sequence is calculated
 	private int computeMaxLength(int center) {
 		int maxlength = 0;
 		for (int i = 0; i < n; i++) {
@@ -324,7 +323,7 @@ public class ExtremeMSA {
 
 	private void output(int[] Space, String outputfile) {
 		int i, j;
-		// ---------输出中心序列----------
+		//Output center sequence
 		String PiAlign[] = new String[n];
 		PiAlign[center] = "";
 		for (i = 0; i < Pi[center].length(); i++) {
@@ -334,12 +333,11 @@ public class ExtremeMSA {
 		}
 		for (j = 0; j < Space[Pi[center].length()]; j++)
 			PiAlign[center] = PiAlign[center].concat("-");
-		// --------中心序列输出完毕------
-		// ---------输出其他序列-------
+		//Output other sequences
 		for (i = 0; i < n; i++) {
 			if (i == center)
 				continue;
-			// ----计算和中心序列比对后的P[i],记为Pi-----
+			//P[i] after calculation and central sequence alignment is denoted by Pi
 			PiAlign[i] = "";
 			for (j = 0; j < Pi[i].length(); j++) {
 				String kong = "";
@@ -352,25 +350,23 @@ public class ExtremeMSA {
 				kong = kong.concat("-");
 			PiAlign[i] = PiAlign[i].concat(kong);
 
-			// ---Pi计算结束---------
-			// ----计算差异数组----
+			//Pi calculation ends
+            //Calculate the difference array
 			int Cha[] = new int[Pi[center].length() + 1];
-			int position = 0; // 用来记录插入差异空格的位置
+			int position = 0; //Used to record the insertion of different spaces
 			for (j = 0; j < Pi[center].length() + 1; j++) {
 				Cha[j] = 0;
 				if (Space[j] - Spaceevery[i][j] > 0)
 					Cha[j] = Space[j] - Spaceevery[i][j];
-				// ----差异数组计算完毕---
-				// ----填入差异空格----
+				//Fill in the difference space
 				position = position + Spaceevery[i][j];
-				if (Cha[j] > 0) { // 在位置position处插入Cha[j]个空格
+				if (Cha[j] > 0) {
 					kong = "";
 					for (int k = 0; k < Cha[j]; k++)
 						kong = kong.concat("-");
 					PiAlign[i] = PiAlign[i].substring(0, position).concat(kong).concat(PiAlign[i].substring(position));
 				}
 				position = position + Cha[j] + 1;
-				// ----差异空格填入完毕--
 			}
 		}
 		try {
@@ -390,8 +386,6 @@ public class ExtremeMSA {
 		} catch (Exception ignored) {
 
 		}
-		// ---------其他序列输出完毕-----
-		// ---------输出结束--------------
 	}
 	
 	public static class ExtremeMapper extends Mapper<Object, Text, NullWritable, Text> {

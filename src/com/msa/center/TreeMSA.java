@@ -21,15 +21,15 @@ import com.msa.utils.ClearDfsPath;
 import com.msa.utils.CopyFile;
 
 public class TreeMSA {
-	private static String Pi[]; // 记录每一个序列
-	private static String Piname[]; // 记录每一个序列的名字
-    private int Spaceevery[][];   //存放中心序列分别与其他序列比对时增加的空格的位置
-    private int Spaceother[][];   //存放其他序列与中心序列比对时增加的空格的位置
-    private int r;                 //被划分的小段的长度
-    private int n;                 //存放序列个数
-    private int center;            //存放中心序列编号
-    private int spacescore=-1, matchscore=0, mismatchscore=-1; //###########定义匹配，不匹配和空格的罚分###############
-    private int Name[][][][];
+	private static String Pi[];// record each sequence
+	private static String Piname[];// record the name of each sequence
+	private int Spaceevery[][];// The location of the added space when the center sequences are aligned with other sequences, respectively
+	private int Spaceother[][];// where additional spaces are added when comparing other sequences with the center sequence
+	private int r;// the length of the segment being divided
+	private int n;// storage sequence number
+	private int center;// storage center sequence number
+	private int spacescore = -1, matchscore = 0, mismatchscore = -1;// ########### Define the match, mismatch, and space penalty ########### ####
+	private int Name[][][][];
 
     public void start(String inputfile, String outputfile, String outputDFS) 
 			throws IOException, ClassNotFoundException, InterruptedException {
@@ -59,7 +59,8 @@ public class TreeMSA {
 			job.waitForCompletion(true);
 		}
         
-        //计算划分的序列长度，若第一条序列长度小于300则选择第一条序列的长度，否则选择该长度除10后的值，有待修改
+        // Calculate the length of the sequence of the partition, if the first sequence length is less than 300, 
+        // select the length of the first sequence, or select the length of the value after 10, to be modified.
         if (Pi[1].length() < 300) {
             r = Pi[1].length();
         }
@@ -67,55 +68,53 @@ public class TreeMSA {
             r = Pi[1].length() / 30;
         }
         center = findCenterSeq();
-        //System.out.println("中心序列是第" + center + "条！");
+        //System.out.println ( "The center sequence is the" + center + "bar!");
 
-        //多序列比对部分
-        Spaceevery = new int[n][Pi[center].length() + 1]; //存放中心序列分别与其他序列比对时增加的空格的位置
-        Spaceother = new int[n][computeMaxLength(center) + 1]; //存放其他序列与中心序列比对时增加的空格的位置
+        // Multi-sequence alignment section
+        // The position of the added space when the center sequences are aligned with other sequences, respectively
+        Spaceevery = new int[n][Pi[center].length() + 1];
+        // where additional spaces are added when comparing other sequences with central sequences
+        Spaceother = new int[n][computeMaxLength(center) + 1];
         for (int i = 0; i < n; i++) {
             if (i == center) continue;
-            //比对Pi[i]与中心序列有重合的前端
+            // align Pi[i] with the center sequence coincides with the frontier part
             if (Name[center][i][0][0] != 0 && Name[center][i][1][0] != 0) {
-                //此处有漏洞，如果Name[center][i][0][0]=0，会报错
                 String strC = Pi[center].substring(0, (Name[center][i][0][0] - 1) * r);
                 String stri = Pi[i].substring(0, Name[center][i][1][0] - 1);
-                int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);//动态规划矩阵计算完毕
-                traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);//回溯，更改空格数组
+                int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
+                traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);
             }
             for (int j = 1; j < Name[center][i][0].length - 1; j++) {
-                //比对Pi[i]与中心序列有重合的中间部分
+                //align Pi[i] with the center sequence coincides with the middle part
                 if (Name[center][i][0][j] != 0 && Name[center][i][1][j] >= Name[center][i][1][j - 1] + r
                         && Name[center][i][0][j] - 1 >= Name[center][i][0][j - 1]) {
-                    //此处有漏洞，如果Name[center][i][0][0]=0，会报错
                     String strC = Pi[center].substring(Name[center][i][0][j - 1] * r, (Name[center][i][0][j] - 1) * r);
                     String stri = Pi[i].substring(Name[center][i][1][j - 1] + r - 1, Name[center][i][1][j] - 1);
-                    int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);//动态规划矩阵计算完毕
+                    int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
                     traceBackForDynamicProgram(M, stri.length(), strC.length(), i,
                             Name[center][i][1][j - 1] + r - 1, Name[center][i][0][j - 1] * r);
                 }
             }
-            //比对Pi[i]与中心序列有重合的后端
+            // align Pi[i] with the center sequence coincides with the back part
             int j = Name[center][i][0].length - 1;
             if (j != 0) {
                 String strC = Pi[center].substring(r * Name[center][i][0][j - 1]);
                 String stri = Pi[i].substring(Name[center][i][1][j - 1] - 1 + r);
-                int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);//动态规划矩阵计算完毕
+                int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
                 traceBackForDynamicProgram(M, stri.length(), strC.length(), i, Name[center][i][1][j - 1] + r - 1,
                         Name[center][i][0][j - 1] * r);
             } else {
                 String strC = Pi[center];
                 String stri = Pi[i];
-                int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);//动态规划矩阵计算完毕
+                int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);
                 traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);
             }
         }
-        //Space数组长度是中心序列长度+1，元素存入该元素的max spaceevery元素值(就是中心序列应该插入的元素值)
         int Space[] = combine();
-        //Space
         output(Space, outputfile);
     }
 
-    //将序列一次读入数组中
+    //The sequence is read into the array once
     private void input(String inputfile) {
         Pi = new String[n];
         Piname = new String[n];
@@ -142,20 +141,19 @@ public class TreeMSA {
         }
     }
 
-    // 建立关键字树
+    // Create a keyword tree
     private NewRoot buildkeywordtree(int i, int r, BuildTree buildTree) {
-        NewRoot trie = new NewRoot(); //创建一个新关键字树（树根）
-        trie.ID = 0; //树根的ID为0
+        NewRoot trie = new NewRoot();
+        trie.ID = 0;
 
-        for (int j = 0; j < Pi[i].length() / r; j++) { //建树
-            // 对于每一个长度为r的划分子串
-            buildTree.build(Pi[i], j * r, r, j + 1, trie); //根据这个子串建树
+        for (int j = 0; j < Pi[i].length() / r; j++) {
+            buildTree.build(Pi[i], j * r, r, j + 1, trie);
         }
-        buildTree.failLink(trie); //建立整个树的失效链接
+        buildTree.failLink(trie); //Create a dead link for the entire tree
         return (trie);
     }
 
-    //找出Num[][]数组中和最大的那一行
+    //Find the largest row in the Num [] [] array
     private int findNumMax(int Num[][]) {
         int Numsum[] = new int[n];
         for (int i = 0; i < n; i++) {
@@ -171,13 +169,14 @@ public class TreeMSA {
         return (tmpcenter);
     }
 
-    //找出中心序列
+    //Find the center sequence
     private int findCenterSeq() {
-        int Num[][] = new int[n][n];   //用来记录出现的个数
-        Name = new int[n][n][2][];  //用来存放出现的名字
+        int Num[][] = new int[n][n];
+        Name = new int[n][n][2][];
         BuildTree buildTree= new BuildTree();
-        for (int i = 0; i < n; i++)         //初始化
+        for (int i = 0; i < n; i++) {
             Num[i][i] = 0;
+        }
         for (int i = 0; i < n; i++) {
             NewRoot keywordtreefori = buildkeywordtree(i, r, buildTree);
             for (int j = 0; j < n; j++) {
@@ -191,19 +190,22 @@ public class TreeMSA {
         return (findNumMax(Num));
     }
 
-    //在动态规划中计算矩阵积分
+    //Matrix integration is calculated in dynamic programming
     private int[][] computeScoreMatrixForDynamicProgram(String stri, String strC) {
         int len1 = stri.length() + 1;
         int len2 = strC.length() + 1;
-        int M[][] = new int[len1][len2];   //定义动态规划矩阵
-        //---初始化动态规划矩阵-----------
+        int M[][] = new int[len1][len2];
+        //Initializes the dynamic programming matrix
         int p, q;
         for (p = 0; p < len1; p++)
+        {
             M[p][0] = spacescore * p;
+        }
         for (q = 0; q < len2; q++)
+        {
             M[0][q] = spacescore * q;
-        //---初始化结束----------
-        //----计算矩阵的值------------
+        }
+        //Calculate the value of the matrix
         for (p = 1; p < len1; p++) {
             for (q = 1; q < len2; q++) {//M[p][q]=max(M[p-1][q]-1,M[p][q-1]-1,M[p-1][q-1]+h)
                 int h;
@@ -214,16 +216,10 @@ public class TreeMSA {
                 M[p][q] = Math.max(M[p - 1][q - 1] + h, Math.max(M[p - 1][q] + spacescore, M[p][q - 1] + spacescore));
             }
         }
-        /*for (int i=0; i<len1; i++) {
-            for (int j=0; j<len2; j++) {
-                System.out.print(M[i][j]+"\t");
-            }
-            System.out.println();
-        }*/
         return (M);
     }
 
-    //在动态规划中回溯
+    //Backtracking in Dynamic Programming
     private void traceBackForDynamicProgram(int[][] M, int p, int q, int i, int k1, int k2) {
         while (p > 0 && q > 0) {
             if (M[p][q] == M[p][q - 1] + spacescore) {
@@ -249,23 +245,11 @@ public class TreeMSA {
                 p--;
             }
         }
-        /*for (int k=0; k<n; k++) {
-            for (int j=0; j<Pi[center].length() + 1; j++) {
-                System.out.print(Spaceevery[i][j]+"\t");
-            }
-            System.out.println();
-        }
-        System.out.println("=============================");
-        for (int k=0; k<n; k++) {
-            for (int j=0; j<computeMaxLength(center) + 1; j++) {
-                System.out.print(Spaceother[i][j]+"\t");
-            }
-            System.out.println();
-        }*/
     }
 
     private int[] combine() {
-        int Space[] = new int[Pi[center].length() + 1];//该数组用来记录在P[center]的最终结果各个空隙间插入空格的个数
+    	//The array is used to record the number of spaces that are inserted into each void in the final result of P[center]
+        int Space[] = new int[Pi[center].length() + 1];
         int i, j;
         for (i = 0; i < Pi[center].length() + 1; i++) {
             int max = 0;
@@ -279,7 +263,7 @@ public class TreeMSA {
         return (Space);
     }
     
-	// 计算序列个数
+	// Calculate the number of sequences
 	public int countnum(String filepath) {
 		int num = 0;
 		try {
@@ -297,7 +281,7 @@ public class TreeMSA {
 		return (num);
 	}
 	
-    //计算除中心序列以外的其他序列的最大长度
+    //The maximum length of the sequence other than the central sequence is calculated
     private int computeMaxLength(int center) {
         int maxlength = 0;
         for (int i = 0; i < n; i++) {
@@ -311,7 +295,7 @@ public class TreeMSA {
 
     private void output(int[] Space, String outputfile) {
         int i, j;
-        //---------输出中心序列----------
+        //Output center sequence
         String PiAlign[] = new String[n];
         PiAlign[center] = "";
         for (i = 0; i < Pi[center].length(); i++) {
@@ -323,12 +307,11 @@ public class TreeMSA {
         for (j = 0; j < Space[Pi[center].length()]; j++) {
             PiAlign[center] = PiAlign[center].concat("-");
         }
-        //--------中心序列输出完毕-----
-        //---------输出其他序列-------
+        //Output other sequences
         for (i = 0; i < n; i++) {
             if (i == center)
                 continue;
-            //----计算和中心序列比对后的P[i],记为Pi-----
+            //P[i] after calculation and central sequence alignment is denoted by Pi
             PiAlign[i] = "";
             for (j = 0; j < Pi[i].length(); j++) {
                 String kong = "";
@@ -342,19 +325,18 @@ public class TreeMSA {
                 kong = kong.concat("-");
             }
             PiAlign[i] = PiAlign[i].concat(kong);
-            //---Pi计算结束---------
-            //----计算差异数组----
+            //Pi calculation ends
+            //Calculate the difference array
             int Cha[] = new int[Pi[center].length() + 1];
-            int position = 0;    //用来记录插入差异空格的位置
+            int position = 0;    //Used to record the insertion of different spaces
             for (j = 0; j < Pi[center].length() + 1; j++) {
                 Cha[j] = 0;
                 if (Space[j] - Spaceevery[i][j] > 0) {
                     Cha[j] = Space[j] - Spaceevery[i][j];
                 }
-                //----差异数组计算完毕---
-                //----填入差异空格----
+                //Fill in the difference space
                 position = position + Spaceevery[i][j];
-                if (Cha[j] > 0) {  //在位置position处插入Cha[j]个空格
+                if (Cha[j] > 0) {
                     kong = "";
                     for (int k = 0; k < Cha[j]; k++) {
                         kong = kong.concat("-");
@@ -362,7 +344,6 @@ public class TreeMSA {
                     PiAlign[i] = PiAlign[i].substring(0, position).concat(kong).concat(PiAlign[i].substring(position));
                 }
                 position = position + Cha[j] + 1;
-                //----差异空格填入完毕--
             }
         }
         try {
@@ -379,8 +360,6 @@ public class TreeMSA {
         } catch (Exception ignored) {
 
         }
-        //---------其他序列输出完毕-----
-        //---------输出结束--------------
     }
     
 	public static class TreeMapper extends Mapper<Object, Text, NullWritable, Text> {

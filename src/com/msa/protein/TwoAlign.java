@@ -11,7 +11,7 @@ import jaligner.util.SequenceParserException;
 public class TwoAlign {
     static char [] alignResultOne, aligntResultTwo;
 
-    //计算两个序列的比对结果
+    //The alignment of the two sequences was calculated
     public void align (String sequence1, String sequence2) {
         try {
             Sequence s1 = SequenceParser.parse(sequence1);

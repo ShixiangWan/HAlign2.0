@@ -67,7 +67,8 @@ public class ProteinMSA {
     		job.waitForCompletion(true);
         }
 
-        //将第一个序列作为根，与其他每个序列进行双序列比对，保留第一个序列的比对结果s_out1
+        //The first sequence as a root, and each other with the sequence of the sequence alignment, 
+        //the first sequence to retain the results of the comparison s_out1
         ArrayList<String> s_out1 = new ArrayList<>();
         ArrayList<String> s_out2 = new ArrayList<>();
         String sequence1 = s_val.get(0);
@@ -79,7 +80,8 @@ public class ProteinMSA {
             s_out2.add(new String(TwoAlign.aligntResultTwo));
         }
 
-        //统计第一个序列的比对结果，得到它的归总比对结果insertSpace1[]
+        //Statistics of the first sequence of the alignment results, 
+        //it is the result of the overall return of the insertSpace1[]
         int index;
         int insertSpace1[] = new int[sequenceLen1 + 1];
         for (String line2 : s_out1) {
@@ -97,7 +99,7 @@ public class ProteinMSA {
             }
         }
 
-        //以第一条序列为中心序列，计算中心序列sequence1
+        //The center sequence sequence 1 is calculated with the first sequence as the center sequence
         StringBuilder stringBuilder = new StringBuilder();
         int insertSpaceLen1 = insertSpace1.length;
         for(int i=0; i<insertSpaceLen1; i++){
@@ -110,7 +112,8 @@ public class ProteinMSA {
         }
         sequence1 = stringBuilder.toString();
 
-        //将归纳得到的sequence1再次与第一次比对结果比对，得到最终各序列比对结果存入文件
+        //Will be summarized by the sequence1 again with the results of the first comparison to get 
+        //the final sequence alignment results stored in the file
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputfile));
             for (int i=0; i<s_key.size(); i++) {

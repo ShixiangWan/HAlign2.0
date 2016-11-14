@@ -29,7 +29,7 @@ public class RunAlignTwo {
             alignsQ[i]='W';
             aligntQ[i]='W';
         }
-        ca=new InitGapPenalty(g,h);//判别数组入口的类
+        ca=new InitGapPenalty(g,h);//Determines the class of the array entry
     }
 
     public void run(int ch){
@@ -66,7 +66,7 @@ public class RunAlignTwo {
             if(i==0&&j==0)tem=false;
         }while(tem);
 
-        //以下完成字符串转置和移除多余
+        //The following completes string transpose and removes superfluous
         int p1,p2;
         String str1=new String(alignsQ);
         String str2=new String(aligntQ);

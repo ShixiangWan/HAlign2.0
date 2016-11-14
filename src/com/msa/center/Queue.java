@@ -3,73 +3,72 @@ package com.msa.center;
 import java.util.ArrayList;
 
 /**
- * 队列类型，用来进行层次遍历时保存访问过的结点（地址）。
- *
- * @author 李慧妍
- * @version 2006年3月27日
+ * The queue type, used to store the visited node (address) when traversing hierarchically.
+ * @author ShixiangWan, Quan Zou
  */
 public class Queue {
 
-    ArrayList Q = new ArrayList();     //声明并初始化一个ArrayList
+    ArrayList<Object> Q = new ArrayList<Object>();
 
     /**
-     * 队列的插入方法：即在队尾插入一个树结点
+     * Insert the queue method: that is inserted at the end of a tree node
      *
-     * @param node - 树结点
+     * @param node - tree node
      */
     public void insert(NewRoot node) {
-        Q.add(node);                  //add是ArrayList提供的
+        Q.add(node);
     }
 
     /**
-     * 队列的插入方法：即在队尾插入一个记录AC算法处理信息的结点
+     * Queue insertion method: that is inserted in the tail of a record AC algorithm processing information nodes
      *
-     * @param I - Record类型的结点
+     * @param I - Record types of nodes
      */
     public void insert(Record I) {
         Q.add(I);
     }
 
     /**
-     * 队列的弹出方法，即从队首读取并删除一个树结点
+     * Queue pop-up method, that is read from the first team and delete a tree node
      *
-     * @return 队首的树结点
+     * @return The tree node of the first team
      */
     public NewRoot popfront() {
-        NewRoot node;              //用一个数结点类型的变量node
-        if (Q.size() == 0)          //size是ArrayList提供的.如果Q为空则
-            node = null;              //node为空值
-        else {                          //否则
-            node = (NewRoot) Q.get(0);      //node等于队首节点
-            Q.remove(0);              //并将队首结点删除。
+        NewRoot node;
+        if (Q.size() == 0) 
+        {
+            node = null;
         }
-        return node;                  //返回node
+        else {
+            node = (NewRoot) Q.get(0);
+            Q.remove(0);
+        }
+        return node;
     }
 
     /**
-     * 队列的弹出方法：从队首读取并删除一个Record类型的节点。
+     * Queue pops up: Reads and deletes a Record type node from the head of the queue.
      *
-     * @return 队首的Record类对象
+     * @return Record the first class object
      */
     public Record popI() {
-        Record I;                //用一个Record类型的变量I
-        /*因为调用时已经保证队列不为空，因此在这里就不进行判断直接处理了*/
-        I = (Record) Q.get(0);    //I等于队首结点
-        Q.remove(0);            //将队首节点删除
-        return I;               //返回I
+        Record I;
+        I = (Record) Q.get(0);
+        Q.remove(0);
+        return I;
     }
 
     /**
-     * 队列的长度方法，利用ArrayList提供的size()方法返回队列长度
+     * Queue length method, the use of ArrayList provided by the size () method returns the queue length
      *
-     * @return 队列长度
+     * @return Queue length
      */
     public int size() {
         return Q.size();
     }
 
     /**
-     * 队列的清除方法，利用ArrayList提供的clear()方法清空队列
+     * Clear the queue method, the use of ArrayList provides clear () method to clear the queue
      */
     public void clear() {
         Q.clear();

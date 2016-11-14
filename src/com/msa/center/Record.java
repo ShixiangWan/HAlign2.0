@@ -3,35 +3,27 @@ package com.msa.center;
 import java.util.ArrayList;
 
 /**
- * 记录类型，用于保存Aho-Corasick算法搜索时找到的匹配信息。
+ * Record type, used to save the Aho-Corasick algorithm to find matching information.
  *
- * @author 李慧妍
- * @version 2006年3月27日
+ * @author ShixiangWan, Quan Zou
  */
 public class Record {
 
-    int site;	/*用于记录该匹配模式在T中出现的起始位置。因为
-                      Aho-Corasick算法是针对每个位置的，因此每个记录只
-                        保存一个位置。*/
-    ArrayList name = new ArrayList(); /*用于记录该记录保存的位置
-                                                 所对应的所有模式*/
-        /*请注意：
-         *从上面的信息域可以看出，尽管每个记录可以对应多个模式，但每个记录却
-          只保存一个位置。因此会存在多个记录（位置）对应一个模式的情况。*/
-
+    int site;
+    ArrayList<Position> name = new ArrayList<Position>();
     /**
-     * 记录的构造方法：根据匹配字符串在T中的起始位置和对应的所有模式建立
-     * 一个新记录。
+     * The constructor of the record: creates a new record based on the starting position 
+     * of the matching string in T and all the corresponding patterns.
      *
-     * @param st  - 本次匹配的模式的在T中的起始位置。
-     * @param pos - 本次匹配的所有模式在P中的编号。
+     * @param st  - The starting position of this matching pattern in T.
+     * @param pos - The number of all the patterns in this match.
      */
-    Record(int st, ArrayList pos) {
-        site = st;            //让site等于st。
-        Position p;         //用一个Position变量p来遍历pos。
-        for (int i = 0; i < pos.size(); i++) { //对于pos中的每一个
-            p = (Position) pos.get(i); //Position类对象，
-            name.add(p);               //将这个对象添加到name里
+    Record(int st, ArrayList<?> pos) {
+        site = st;
+        Position p;
+        for (int i = 0; i < pos.size(); i++) { //For each of the Position class objects in pos, add the object to name
+            p = (Position) pos.get(i);
+            name.add(p);
         }
     }
 }

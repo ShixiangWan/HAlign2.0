@@ -3,67 +3,78 @@ package com.msa.center;
 import java.util.ArrayList;
 
 public class NewRoot {
-    /*如果两个划分存在相同前缀，因为该前缀中的符号在树中有唯一的位置，故用
-             一个ArrayList的positions来记录该相同符号在P中所出现的位置*/
-    ArrayList positions = new ArrayList();
-    char v;    //结点所代表的符号
-    NewRoot nv;  //失效链接中该结点的对应结点（地址）
-    ArrayList sons = new ArrayList();	/*用来记录该节点所有的儿子结点（地址）*/
-    int ID;	  /*为了方便人为判断关键字树的建立是否正确，为每个结点引入一个ID以助判断结点之间的关系。注：以后可以删除，对结果无甚影响*/
-    int level;	/*结点所在的层测。为了在AC算法中能得到Pi在T中的开始位置而设立。该位置用当前T中位置号减去当前结点的层次即可得到。*/
+    /*If the two partitions have the same prefix, because the symbols in the prefix have a unique position in the tree, 
+     * the position of the same symbol in P is recorded with an ArrayList's positions*/
+    ArrayList<Position> positions = new ArrayList<Position>();
+    char v;    	//Node represents the symbol
+    NewRoot nv;  //The corresponding node (address) of the node in the dead link
+    ArrayList<NewRoot> sons = new ArrayList<NewRoot>();	/*Used to record the son of all the node nodes (address)*/
+    /*In order to facilitate the establishment of the key tree to determine whether the correct, 
+    for each node to introduce an ID to help determine the relationship between nodes. 
+    Note: you can delete later, no effect on the results*/
+    int ID;	  
+    /*The layer where the nodes are located. In order to get the start position of Pi in T in the AC algorithm, we set up. 
+     * This position is obtained by subtracting the current node level from the position number in the current T.*/
+    int level;	
 
     /**
-     * 构造方法：初始化一个根结点，nv指向根结点本身
+     * Constructor: Initializes a root node, nv points to the root node itself
      */
     NewRoot() {
-        v = 'r';    //结点的符号是跟
-        nv = this;  //结点的失效链接是它本身
+        v = 'r';
+        nv = this;
         level = 0;
     }
 
     /**
-     * 构造方法：根据当前符号来初始化一个结点（通常是儿子）
+     * Constructor: Initializes a node (usually a son) based on the current symbol.
      */
-    NewRoot(char c) {
-        v = c;  //设结点的符号为c
+    NewRoot(char c) 
+    {
+        v = c;
     }
 
     /**
-     * 该方法把相同前缀中的符号在P中出现的新位置保存起来
+     * This method saves the new location where the symbols in the same prefix appear in P
      *
-     * @param posit - 符号在P中的位置
+     * @param posit - The position of the symbol in P
      */
     public void setPos(int posit) {
-        Position posrec = new Position(); //新建一个Position对象
-        posrec.position = posit;    //该对象的设置为整数posit
-        positions.add(posrec);    //将这个对象加入到positions中。
+        Position posrec = new Position();
+        posrec.position = posit;
+        positions.add(posrec);
     }
 
     /**
-     * 该方法为结点添加一个新儿子
+     * This method adds a new son to the node
      *
-     * @param newSon - 新儿子
+     * @param newSon - new son
      */
     public void addSon(NewRoot newSon) {
-        sons.add(newSon);   //add方法有ArrayList提供
+        sons.add(newSon);
     }
 
     /**
-     * 该方法根据输入的符号在结点的所有儿子中查询是否已经有代表该符号的儿
-     * 　子出现。有则返回该儿子（地址），无则返回空
-     * @param c - 要查询的符号
-     * @return son - 查询结果，查到则返回该儿子，无则为空
+     * The method queries all the sons of the node based on the entered notation for whether or not 
+     * a son already exists for the symbol. There is to return to the son (address), and then return to the empty
+     * @param c - The symbol to query
+     * @return son - Query results, found to return to the son, or null
      */
     public NewRoot searchSon(char c) {
         NewRoot son = null;
-        for (int i = 0; i < sons.size(); i++) {
-            son = (NewRoot) sons.get(i);    //查询每一个儿子
-            if (son.v == c)                //如果儿子的字符和c一样
-                break;                    //中断循环
+        for (int i = 0; i < sons.size(); i++) 
+        {
+            son = (NewRoot) sons.get(i);
+            if (son.v == c)
+            {
+                break;
+            }
             else
-                son = null;                //否则儿子为空
+            {
+                son = null;
+            }
         }
-        return son;                        //返回查询结果
+        return son;
     }
 
 }

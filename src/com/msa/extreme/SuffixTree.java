@@ -2,57 +2,52 @@ package com.msa.extreme;
 
 import java.util.*;
 /**
- * <p>
- * 后缀树的实现：Ukkonen构造法，
- * 论文翻译文章：<code>http://www.oschina.net/translate/ukkonens-suffix-tree-algorithm-in-plain-english</code>
- * 论文中使用边来保存字符信息，此处实现使用节点保存字符信息，没有差别。</b>
- * 同时树的结构通过子节点和兄弟节点保存，即遍历一个节点的子节点，需先找到其直接子节点，然后通过该子节点访问其兄弟节点找到全部子节点
+ * Suffix tree implementation: Ukkonen construction method,
+ * Translated Articles:<code>http://www.oschina.net/translate/ukkonens-suffix-tree-algorithm-in-plain-english</code>
+ * In this paper, we use the edge to save the character information. Here we use the node to save the character information, 
+ * and there is no difference. At the same time, the structure of the tree is preserved by child nodes and sibling nodes, 
+ * that is, traversing a child node of a node, it needs to find its direct child node first, and then access its sibling node
+ * to find all child nodes.
+ * 
+ * @author Quan Zou
  */
 public class SuffixTree {
-	private  Node root = new Node(new char[0]);// 根节点，根节点无chars，所以new char[0]
-	// active point，一个三元组：(active_node,active_edge,active_length)
-	// active_node是当前的活动点，用节点代表，active_edge是活动的边，这里用节点来表示，active_length是活动的长度
+	private  Node root = new Node(new char[0]);// root node, which is no chars
+	// active point is triple：(active_node, active_edge, active_length)
+	// active_node is current active point, active_edge is active edge，active_length is active length
 	private ActivePoint activePoint = new ActivePoint(root, null, 0);
-	private int reminder = 0;// remainder，表示还剩多少后缀需要插入
+	private int reminder = 0;// remainder, indicating how many suffixes need to be inserted
 
 	public int minMatchLen = 15;
 
 	/**
-	 * 构建后缀树
+	 * Build the suffix tree
 	 *
 	 * @param word
 	 */
 	public void build(String word) {
 		int index = 0;
 		char[] chars = word.toCharArray();
-		while (index < chars.length) {// 循环建立后缀
-			int currenctIndex = index++;// 保存当前的位置,注意：int a=b++;相当于int a=b;b++;不是a=b+1!
-			char w = chars[currenctIndex];// 当前的后缀字符
+		while (index < chars.length) { // The loop creates the suffix
+			int currenctIndex = index++; // save current location
+			char w = chars[currenctIndex]; // The current suffix character
 
-			// this.print();
-			//	System.out.println("插之前活动三元组"+activePoint.toString());
-			//	System.out.println("插之前reminder：" + String.valueOf(reminder));
-
-			//		if(currenctIndex%1000==1)
-			//	   System.out.println("building the prefix center: " + currenctIndex + "  /  "+(chars.length-1));
-
-
-
-			if (find(w)) {// 查找是否存在保存有当前后缀字符的节点
-				reminder++;// 存在，则将reminder+1，activePoint.length+1，然后返回即可
+			if (find(w)) {// Finds whether there is a node that holds the current suffix character
+				reminder++;//Exists, then reminder + 1, activePoint.length + 1, and then return to it
 				continue;
 			}
 
-			// 不存在的话，如果reminder==0表示之前在该字符之前未剩余有其他带插入的后缀字符，所以直接插入该后缀字符即可
-
+			/*If not, if reminder == 0 before the character before there is no remaining with the inserted 
+			 * suffix characters, so you can directly insert the suffix character*/
 			if (reminder == 0) {
-				// 直接在当前活动节点插入一个节点即可
-				// 这里插入的节点包含的字符是从当前字符开始该字符串剩余的全部字符，这里是一个优化，
-				// 优化参考自：http://blog.csdn.net/v_july_v/article/details/6897097 (3.6、归纳, 反思, 优化)
+				/*Directly in the current active node to insert a node can be inserted here, the node contains 
+				 * the character from the current character to start the string of all the remaining characters, 
+				 * here is an optimization.*/
 				Node node = new Node(Arrays.copyOfRange(chars, currenctIndex, chars.length));
 				//node.position.add(currenctIndex);
 				node.label=currenctIndex;
-				// 如果当前活动点无子节点，则将新建的节点作为其子节点即可，否则循环遍历子节点(通过兄弟节点进行保存)
+				/*If the current active node has no child nodes, it will be the new node as its child nodes. 
+				 * Otherwise, it will loop through the child nodes (save through the sibling node)*/				
 				Node child = activePoint.point.child;
 				if (null == child) {
 					activePoint.point.child = node;
@@ -72,13 +67,15 @@ public class SuffixTree {
 				 *********/
 			} else if(activePoint.index==null){
 
-				//正好前一条边存了reminder的那些，插入的是一个新字符，直接建立个新边存该字符，并把之前欠下的补充
+				/*Just before the one side of the reminder that those who insert a new character, 
+				 * the new side of the deposit directly to the character, and to the previous owe supplement*/
 				Node node = new Node(Arrays.copyOfRange(chars, currenctIndex, chars.length));
 				//node.position.add(currenctIndex-reminder);
 				node.label=currenctIndex-reminder;
 
 
-				// 如果当前活动点无子节点，则将新建的节点作为其子节点即可，否则循环遍历子节点(通过兄弟节点进行保存)
+				/*If the current active node has no child nodes, it will be the new node as its child nodes. 
+				 * Otherwise, it will loop through the child nodes (save through the sibling node)*/
 				Node child = activePoint.point.child;
 				if (null == child) {
 					activePoint.point.child = node;
@@ -97,30 +94,29 @@ public class SuffixTree {
 				 }
 				 *************/
 
-
-
-				// 分割完成之后需根据规则1和规则3进行区分对待
-				// 按照规则1进行处理
-				if (root == activePoint.point) {// 活动节点是根节点的情况
+				// According to rule 1 for processing
+				if (root == activePoint.point) {// active node is root node
 					// activePoint.point == root
-					// 按照规则3进行处理
-				} else if (null == activePoint.point.suffixNode) {// 无后缀节点，则活动节点变为root
+					// According to rule 3 for processing
+				} else if (null == activePoint.point.suffixNode) {// No-suffix node, the active node becomes root
 					activePoint.point = root;
-				} else {// 否则活动节点变为当前活动节点的后缀节点
+				} else {// Otherwise, the active node becomes the suffix node of the current active node
 					activePoint.point = activePoint.point.suffixNode;
 				}
-				// 活动边和活动边长度都重置
+				// Both active and active edge lengths are reset
 				activePoint.index = null;
 				activePoint.length = 0;
-				// 递归处理剩余的待插入后缀
+				// The remainder of the suffix to be inserted is processed recursively
 				innerSplit(chars, currenctIndex, activePoint.point);
-			}	else if(reminder-getNodeString(activePoint.point).length()<activePoint.index.chars.length){//这里不能是reminder，而是reminder-活动点到跟的距离
-				// 如果reminder>0，则说明该字符之前存在剩余字符，需要进行分割，然后插入新的后缀字符
-				Node splitNode = activePoint.index;// 待分割的节点即为活动边(active_edge)
-				// 创建切分后的节点，放到当前节点的子节点
-				// 该节点继承了当前节点的子节点以及后缀节点信息
-				//新建一个node当作index的儿子，index变成内部节点
-				Node node = new Node(Arrays.copyOfRange(splitNode.chars, activePoint.length, splitNode.chars.length));// 从活动边长度开始截取剩余字符作为子节点
+			}	else if(reminder-getNodeString(activePoint.point).length()<activePoint.index.chars.length){//Not reminder, is distance
+				// If reminder> 0, it indicates that there are remaining characters before the character, 
+				// need to be split, and then insert the new suffix character
+				Node splitNode = activePoint.index;// The node to be split is the active edge(active_edge)
+				// Create a segmented node and drop it on the child node of the current node
+				// This node inherits the information of the child node and suffix node of the current node
+				// Create a new node as the son of index, index into internal nodes
+				// The remaining characters are taken as child nodes starting from the active edge length
+				Node node = new Node(Arrays.copyOfRange(splitNode.chars, activePoint.length, splitNode.chars.length));
 				node.child = splitNode.child;
 
 				Node child = splitNode.child;
@@ -136,12 +132,15 @@ public class SuffixTree {
 				splitNode.suffixNode = null;
 				//node.position = (ArrayList<Integer>) splitNode.position.clone();
 				if(splitNode.chars[splitNode.chars.length-1]=='$')
+				{
 					node.label=splitNode.label;
-				// 创建新插入的节点，放到当前节点的子节点(通过子节点的兄弟节点保存)
-				Node newNode = new Node(Arrays.copyOfRange(chars, currenctIndex, chars.length));// 插入新的后缀字符
+				}
+				// Insert the new suffix character
+				Node newNode = new Node(Arrays.copyOfRange(chars, currenctIndex, chars.length));
 				splitNode.child.brother = newNode;
 				newNode.father=splitNode;
-				splitNode.chars = Arrays.copyOfRange(splitNode.chars, 0, activePoint.length);// 修改当前节点的字符
+				// Modifies the character of the current node
+				splitNode.chars = Arrays.copyOfRange(splitNode.chars, 0, activePoint.length);
 				//newNode.position.add(currenctIndex-reminder);
 				newNode.label=currenctIndex-reminder;
 
@@ -153,29 +152,26 @@ public class SuffixTree {
 				 }
 				 ****************/
 
-				// 分割完成之后需根据规则1和规则3进行区分对待
-				// 按照规则1进行处理
-				if (root == activePoint.point) {// 活动节点是根节点的情况
+				// According to rule 1 for processing
+				if (root == activePoint.point) {// active node is root node
 					// activePoint.point == root
-					// 按照规则3进行处理
-				} else if (null == activePoint.point.suffixNode) {// 无后缀节点，则活动节点变为root
+					// According to rule 3 for processing
+				} else if (null == activePoint.point.suffixNode) {// No-suffix node, the active node becomes root
 					activePoint.point = root;
-				} else {// 否则活动节点变为当前活动节点的后缀节点
+				} else {// Otherwise, the active node becomes the suffix node of the current active node
 					activePoint.point = activePoint.point.suffixNode;
 				}
-				// 活动边和活动边长度都重置
+				// Both active and active edge lengths are reset
 				activePoint.index = null;
 				activePoint.length = 0;
-				// 递归处理剩余的待插入后缀
+				// The remainder of the suffix to be inserted is processed recursively
 				innerSplit(chars, currenctIndex, splitNode);
 			}
 			else if(reminder-getNodeString(activePoint.point).length()==activePoint.index.chars.length){
-				//直接在活动边的结点上插入一个新的儿子，不用插入内部节点了
 				Node node = new Node(Arrays.copyOfRange(chars, currenctIndex, chars.length));
 				//node.position.add(currenctIndex-reminder);
 				node.label=currenctIndex-reminder;
 
-				// 如果当前活动点无子节点，则将新建的节点作为其子节点即可，否则循环遍历子节点(通过兄弟节点进行保存)
 				Node child = activePoint.index.child;
 				if (null == child) {
 					activePoint.index.child = node;
@@ -195,23 +191,24 @@ public class SuffixTree {
 				 ************/
 
 				Node ttmp=activePoint.index;
-				if (root == activePoint.point) {// 活动节点是根节点的情况
+				if (root == activePoint.point) {// active node is root node
 					// activePoint.point == root
-					// 按照规则3进行处理
-				} else if (null == activePoint.point.suffixNode) {// 无后缀节点，则活动节点变为root
+					// According to rule 3 for processing
+				} else if (null == activePoint.point.suffixNode) {
+					// No-suffix node, the active node becomes root
 					activePoint.point = root;
-				} else {// 否则活动节点变为当前活动节点的后缀节点
+				} else {// Otherwise, the active node becomes the suffix node of the current active node
 					activePoint.point = activePoint.point.suffixNode;
 				}
-				// 活动边和活动边长度都重置
+				// Both active and active edge lengths are reset
 				activePoint.index = null;
 				activePoint.length = 0;
-				// 递归处理剩余的待插入后缀
+				// The remainder of the suffix to be inserted is processed recursively
 				innerSplit(chars, currenctIndex, ttmp);
 			}
 			//***********
 			if(index==chars.length&&reminder > 0){
-				System.out.println("此处不应该出现！");
+				System.out.println("This should not appear!");
 				index-=reminder;
 				reminder=0;
 				activePoint.point = root;
@@ -224,26 +221,16 @@ public class SuffixTree {
 	}
 
 	/**
-	 * 处理剩余的待插入后缀
-	 * @param chars	构建后缀树的全部字符
-	 * @param currenctIndex	当前已处理到的字符位置
-	 * @param prefixNode 前继节点，即已经进行分割的节点，用于标识后缀节点
+	 * Process the remaining pending insert suffixes
+	 * @param chars	Constructs all the characters of the suffix tree
+	 * @param currenctIndex	The character position that is currently being processed
+	 * @param prefixNode The successor node, the node that has been segmented, is used to identify the suffix node
 	 */
 	private void innerSplit(char[] chars, int currenctIndex, Node prefixNode) {
-		// 此处计算剩余待插入的后缀的开始位置，例如我们需要插入三个后缀(abx,bx,x)，已处理了abx，则还剩余bx和x，则下面计算的位置就是b的位置
+		/*For example, we need to insert the three suffixes (abx, bx, x), has handled the abx, 
+		 * there are still bx and x, then the following calculation of the position is b position*/
 		int start = currenctIndex - reminder + 1;
-
-		//if(null!=root.child&&null!=root.child.suffixNode)
-		//	  System.out.println("活动后缀是"+root.child.suffixNode);
-		//	System.out.println("当前插入后缀：" + String.copyValueOf(chars, start, currenctIndex - start + 1) + "========");
-		//	System.out.println("活动三元组"+activePoint.toString());
-		//	System.out.println("reminder：" + String.valueOf(reminder));
-		// dealStart表示本次插入我们需要进行查找的开始字符位置，因为由于规则2，可能出现通过后缀节点直接找到活动节点的情况
-		// 如通过ab节点的后缀节点，直接找到节点b，那么此时的activePoint(node[b], null, 0)，我们需要从node[b]开始查找x，dealStart的位置就是x的位置
-
-		//这里错了，不应该是activePoint.point.chars.length，而是活动点到根的所有字符个数！！！
-		//int dealStart = start + activePoint.point.chars.length + activePoint.length;
-		//************后面要修改，每个节点到根的字符个数应该存储*****
+		//To be modified later, each node to the root of the number of characters should be stored
 		int tmpp=0;
 		Node fathh= activePoint.point;
 		while(fathh!=root){
@@ -253,28 +240,20 @@ public class SuffixTree {
 
 		int dealStart = start + tmpp + activePoint.length;
 		//*********************************************************
-		// 从dealStart开始查找所有后缀字符是否都存在(相对与活动点)
-
-
-//System.out.println("注意了~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		// Starting from the dealStart find all the suffix characters are there (relative to the active point)
 		for (int index = dealStart; index <= currenctIndex; index++) {
 			char w = chars[index];
-			//		System.out.println(index);
-			//		System.out.println(currenctIndex);
-			//		System.out.print(w);
-
-			if (find(w)) {// 存在，则查找下一个，activePoint.length+1，这里不增加reminder
-				//		System.out.println("匹配上了");
+			if (find(w)) {
 				continue;
 			}
-			//	System.out.println("没匹配上：index："+index);
-			Node splitNode = null;// 被分割的节点
+			Node splitNode = null;// The segmented node
 
-			if(null==activePoint.index){// 如果activePoint.index==null，说明没有找到活动边，那么只需要在活动节点下插入一个节点即可
-				splitNode=activePoint.point;//******我自己加的zouquan*******
-
+			if(null==activePoint.index){
+				// If activePoint.index == null, indicating that no active edge, 
+				// then only need to insert a node in the active node can be
+				splitNode=activePoint.point;
 				Node node = new Node(Arrays.copyOfRange(chars, index, chars.length));
-
+				
 				//node.position.add(start);
 				node.label=start;
 				Node child = activePoint.point.child;
@@ -287,27 +266,21 @@ public class SuffixTree {
 					child.brother = node;
 				}
 				node.father = activePoint.point;
-				//修改活动点！！
-				//*******************************（我自己加的）
-				// 分割完成之后需根据规则1和规则3进行区分对待
-				// 按照规则1进行处理
-				if (root == activePoint.point) {// 活动节点是根节点的情况
+				// modify root node
+				// After the completion of the division according to rule 1 and rule 3 to be treated differently
+				// According to rule 1 for processing
+				if (root == activePoint.point) {// active node is root node
 					// activePoint.point == root
-					// 按照规则3进行处理
-				} else if (null == activePoint.point.suffixNode) {// 无后缀节点，则活动节点变为root
+					// According to rule 3 for processing
+				} else if (null == activePoint.point.suffixNode) {// No-suffix node, the active node becomes root
 					activePoint.point = root;
-				} else {// 否则活动节点变为当前活动节点的后缀节点
+				} else {// Otherwise, the active node becomes the suffix node of the current active node
 					activePoint.point = activePoint.point.suffixNode;
 				}
-				// 活动边和活动边长度都重置
+				// Both active and active edge lengths are reset
 				activePoint.index = null;
 				activePoint.length = 0;
 				//*******************************
-
-
-
-
-
 				/**************
 				 Node fath = node.father;
 				 while(null!=fath && fath!=root){
@@ -316,11 +289,10 @@ public class SuffixTree {
 				 }
 				 ***************/
 			}else{
-
-				// 开始分割，分割部分同上面的分割
-				splitNode = activePoint.index;//(活动边的儿子节点，不是父亲节点)
-				// 创建切分后的节点，放到当前节点的子节点
-				// 该节点继承了当前节点的子节点以及后缀节点信息
+				// Start the division, the division of the same part of the above segmentation
+				splitNode = activePoint.index;//(The active node's son node is not the parent node)
+				// Create a segmented node and drop it on the child node of the current node
+				// This node inherits the information of the child node and suffix node of the current node
 				Node node = new Node(Arrays.copyOfRange(splitNode.chars, activePoint.length, splitNode.chars.length));
 				node.child = splitNode.child;
 
@@ -337,17 +309,17 @@ public class SuffixTree {
 				//node.position = (ArrayList<Integer>) splitNode.position.clone();
 				if(splitNode.chars[splitNode.chars.length-1]=='$')
 					node.label=splitNode.label;
-				// 创建新插入的节点，放到当前节点的子节点(通过子节点的兄弟节点保存)
+				/*Creates a newly inserted node and places it in the child node of 
+				 * the current node (saved by the sibling node of the child node)*/
 				Node newNode = new Node(Arrays.copyOfRange(chars, index, chars.length));
 				splitNode.child.brother = newNode;
 				newNode.father = splitNode;
-				// 修改当前节点的字符数
+				// Modifies the number of characters for the current node
 				splitNode.chars = Arrays.copyOfRange(splitNode.chars, 0, activePoint.length);
-				// 规则2，连接后缀节点
+				// Rule 2, connect the suffix node
+				prefixNode.child.suffixNode = splitNode;
 
-				prefixNode.child.suffixNode = splitNode;//注意:前面原代码写的傻逼，明明应该新建一个splitNode,这样predixNode.suufixNode就应该是splitNode.可以作者傻逼，非要把原节点当成splitNode,新建一个节点node存放原来的节点(newNode是存放插入的新边的叶子)，这样prefixNode就变成了splitNode！
-
-				//****计算splitNode到root的边上的字符串长度
+				//****Computes the length of the string from the splitNode to the root
 				int k=0;
 				Node tmp = splitNode;
 				while(tmp!=root){
@@ -375,12 +347,11 @@ public class SuffixTree {
 
 			reminder--;
 
-			// 按照规则1进行处理
-			if (root == activePoint.point) {// 活动节点是根节点的情况
+			// According to rule 1 for processing
+			if (root == activePoint.point) {// active point is root point
 				// activePoint.point == root
-
-				// 按照规则3进行处理
-			} else if (null == activePoint.point.suffixNode) {// 无后缀节点，则活动节点变为root
+				// According to rule 3 for processing
+			} else if (null == activePoint.point.suffixNode) {
 				activePoint.point = root;
 			} else {
 				activePoint.point = activePoint.point.suffixNode;
@@ -388,8 +359,7 @@ public class SuffixTree {
 
 			activePoint.index = null;
 			activePoint.length = 0;
-			if(reminder > 0){// 如果reminder==0则不需要继续递归插入后缀
-
+			if(reminder > 0){// If reminder == 0 you do not need to continue recursively inserting the suffix
 				innerSplit(chars, currenctIndex, splitNode);
 			}
 		}
@@ -397,7 +367,7 @@ public class SuffixTree {
 	}
 
 	/**
-	 * 寻找当前活动点的子节点中是否存在包含后缀字符的节点(边)
+	 * Finds whether there is a node (edge) containing the suffix character in the child node of the current active point.
 	 *
 	 * @param w
 	 * @return
@@ -406,18 +376,16 @@ public class SuffixTree {
 		final Node start = activePoint.point;
 		final Node current = activePoint.index;
 		boolean exist = false;
-//		System.out.println("find开始"+activePoint.toString());
-		if (null == current) {// current==null 无活动边，则从活动点的子节点开始查找
-			// 寻找子节点
+		if (null == current) {
 			Node child = start.child;
 			while (null != child) {
-				if (child.chars[0] == w) {// 存在
+				if (child.chars[0] == w) {
 					exist = true;
 					if(child.chars.length>1){
 						activePoint.index = child;
-						activePoint.length++;// activePoint.length++
+						activePoint.length++;
 					}
-					else if(child.chars.length==1){ //如果匹配边的字符串长度为1，活动点继续向下移动
+					else if(child.chars.length==1){
 						activePoint.point=child;
 						activePoint.index = null;
 						activePoint.length = 0;
@@ -428,44 +396,38 @@ public class SuffixTree {
 				}
 			}
 		}
-
-		else if (current.chars.length>activePoint.length&&current.chars[activePoint.length] == w) {// 有活动边，则在活动边上查找
+		else if (current.chars.length>activePoint.length&&current.chars[activePoint.length] == w) {
 			activePoint.length++;
 			exist = true;
 			if (current.chars.length == activePoint.length) {
-				// 如果活动边的长度已达到活动边的最后一个字符，则将活动点置为活动边，同时活动边置为null，长度置为0
 				activePoint.point = current;
 				activePoint.index = null;
 				activePoint.length = 0;
-
 			}
-
 		}
 		else {
 			exist = false;
 		}
-//		System.out.println("find结束"+activePoint.toString());
 		return exist;
 	}
 
 	/**
-	 * 查找给定字符串是否是其子串
+	 * Finds if the given string is a substring
 	 *
 	 * @param word
 	 * @return
 	 */
 	public boolean select(String word) {
 		char[] chars = word.toCharArray();
-		int index = 0;// 查找到的节点的匹配的位置
-		// 查找从根节点开始，遍历子节点
+		int index = 0;
 		Node start = root;
 		for (int i = 0; i < chars.length; i++) {
-			if (start.chars.length < index + 1) {// 如果当前节点已匹配完，则从子节点开始，同时需重置index==0
+			if (start.chars.length < index + 1) {
 				index = 0;
 				start = start.child;
 				while (null != start) {
-					// 比较当前节点指定位置(index)的字符是否与待查找字符一致
-					// 由于是遍历子节点，所以如果不匹配换个子节点继续
+					// Compares whether the character at the specified index of the current node matches the character to be searched
+					// Since it is traversing the child nodes, if not match another child node, then continue
 					if (start.chars[index] == chars[i]) {
 						index++;
 						break;
@@ -473,11 +435,11 @@ public class SuffixTree {
 						start = start.brother;
 					}
 				}
-				if (null == start) {// 子节点遍历完都无匹配则返回false
+				if (null == start) {// Returns false if the child nodes have no matching traversal
 					return false;
 				}
 			} else if (start.chars[index] == chars[i]) {
-				// 如果当前查找到的节点的还有可比较字符，则进行比较，如果不同则直接返回false
+				// If the current node to find there are comparable characters; if not, return false
 				index++;
 			} else {
 				return false;
@@ -486,7 +448,7 @@ public class SuffixTree {
 		return true;
 	}
 	/**
-	 * 返回node节点的所有后代叶节点的label(position)
+	 * Returns the label (position) of all descendant leaf nodes of the node node.
 	 * @param node
 	 * @return
 	 */
@@ -508,8 +470,9 @@ public class SuffixTree {
 	}
 
 	/**
-	 * 查找给定字符串的最长前缀，并返回其alignment效果最好的起始位置和长度，返回(pos,len)对
-	 * wordstartpos是输入word在原始序列中开始的位置
+	 * Finds the longest prefix of a given string and returns the best start position 
+	 * and length for its alignment effect. Returns (pos, len) For wordstartpos, 
+	 * enter the position where word begins in the original sequence
 	 * @param word
 	 * @return
 	 */
@@ -520,18 +483,18 @@ public class SuffixTree {
 		word=word.substring(wordstartpos);
 
 		char[] chars = word.toCharArray();
-		int index = 0;// 查找到的节点的匹配的位置
-		// 查找从根节点开始，遍历子节点
-		Node start = root;
+		int index = 0;	// Find the matching location of the node
+		Node start = root; // Lookup starts at the root node and traverses the child nodes
 
 		for (int i = 0; i < chars.length; i++) {
-			if (start.chars.length < index + 1) {// 如果当前节点已匹配完，则从子节点开始，同时需重置index==0
+			// If the current node has been matched, it starts at the child node and resets index == 0 at the same time
+			if (start.chars.length < index + 1) {
 				index = 0;
 				start = start.child;
 
 				while (null != start) {
-					// 比较当前节点指定位置(index)的字符是否与待查找字符一致
-					// 由于是遍历子节点，所以如果不匹配换个子节点继续
+					// Compares whether the character at the specified index of the current node matches the character to be searched
+					// Since it is traversing the child nodes, if you do not match another child node to continue
 
 					if (start.chars.length>index&&start.chars[index] == chars[i]) {
 						index++;
@@ -539,7 +502,7 @@ public class SuffixTree {
 					} else if(null != start.brother){
 						start = start.brother;
 					}
-					else if (null == start.brother&&i>=minMatchLen){ //断在一个结点，每一个儿子都没能继续匹配上
+					else if (null == start.brother&&i>=minMatchLen){ //Broken in a node, each son did not continue to match
 
 						Integer[] startpos= (Integer[]) getNodeAllLeafSonLabel(start.father).toArray(new Integer[getNodeAllLeafSonLabel(start.father).size()]);
 						int mindis=Integer.MAX_VALUE;
@@ -574,11 +537,10 @@ public class SuffixTree {
 				}
 
 			} else if (start.chars[index] == chars[i]) {
-				// 如果当前查找到的节点的还有可比较字符，则进行比较，如果不同则直接返回false
+				// If the current node to find there are comparable characters, the comparison is, if not directly return false
 				index++;
 			} else if (i>=minMatchLen){
-				//断在一条边的中间，或叶节点，因为叶节点是$,肯定不同，所以在这结束
-
+				//Broken in the middle of an edge, or leaf node, because the leaf node is $, definitely different, so at this end
 				Integer[] startpos= (Integer[]) getNodeAllLeafSonLabel(start).toArray(new Integer[getNodeAllLeafSonLabel(start).size()]);
 				int mindis=Integer.MAX_VALUE;
 				int pos_j=-1;
@@ -609,7 +571,6 @@ public class SuffixTree {
 				return back;
 			}
 		}
-		//i到头了
 
 
 		Integer[] startpos= (Integer[]) getNodeAllLeafSonLabel(start).toArray(new Integer[getNodeAllLeafSonLabel(start).size()]);
@@ -629,7 +590,7 @@ public class SuffixTree {
 	}
 
 	/**
-	 * 格式化打印出整个后缀树
+	 * Formatting prints the entire suffix tree
 	 */
 	public void print() {
 		Node child = root.child;
@@ -643,10 +604,9 @@ public class SuffixTree {
 	}
 
 	/**
-	 * <p>
-	 * 后缀树的节点，即边
-	 * 每个节点的chars是其父亲到该点的边的字符串，root节点没父亲，所以chars=“”
-	 * </p>
+	 * The node of the suffix tree, the edge
+	 * Each node chars is the father of the point to the side of the string, 
+	 * the root node no father, so chars = ""
 	 */
 	private class Node {
 		public char[] chars;
@@ -654,8 +614,13 @@ public class SuffixTree {
 		public Node brother;
 		public Node father;
 		public Node suffixNode;
-		//public ArrayList <Integer> position;  //用来记录内部节点所有后代的叶节点代表的后缀的起始位置，如果是叶节点就只有一个整数值，就是它代表的后缀的起始位置
-		public int label;//记录叶节点代表的后缀的起始位置，内部结点可能也有值，要通过chars的最后是否是$来判断
+		/*It is used to record the descendants of all descendants of the leaf node on behalf 
+		* of the suffix of the starting position, if it is a leaf node is only an integer value, 
+		* it represents the beginning of the suffix position */
+		//public ArrayList <Integer> position;  
+		/*Record leaf node represents the starting position of the suffix, 
+		 *the internal node may also have a value, through the last chars is $ to determine */
+		public int label;
 		public Node(char[] chars) {
 			this.chars = chars;
 			//position = new ArrayList();
@@ -663,7 +628,6 @@ public class SuffixTree {
 
 		@Override
 		public String toString() {
-			//return "Node [chars=" + String.valueOf(chars) + "]"+"position:"+String.valueOf(position);
 			return "Node [chars=" + String.valueOf(chars) + "]";
 		}
 
@@ -687,10 +651,10 @@ public class SuffixTree {
 	}
 
 	/**
-	 * <p>
-	 * 活动点(active point)，一个三元组：(active_node,active_edge,active_length)
-	 * 活动边的父亲是point,儿子是index；活动点应该是point,提取存储的字符串要从儿子index的chars中找(0,length)
-	 * </p>
+	 * active point, a triple: (active_node,active_edge,active_length)
+	 * Active side of the father is the point, the son is the index; 
+	 * the activity point should be point, extract the stored string 
+	 * from the son of the chars to find (0, length)
 	 */
 	private class ActivePoint {
 		public Node point;
@@ -709,7 +673,8 @@ public class SuffixTree {
 		}
 	}
 	/**
-	 * 对String格式化,删除非法字符(只保留agctn,其余字符全部替换成n),全部转换成小写,u全部换成t
+	 * String formatting, delete illegal characters (only retain agctn, all the rest 
+	 * of the characters replaced by n), all converted to lowercase, u all replaced by t
 	 * @param s
 	 * @return
 	 */
@@ -734,7 +699,7 @@ public class SuffixTree {
 	}
 
 	/**
-	 * 输入一个节点，输出从跟到该结点的边上的字符串
+	 * Enter a node to output a string from the edge to the node
 	 * @param start
 	 * @return
 	 */
@@ -750,33 +715,13 @@ public class SuffixTree {
 		return s;
 	}
 
-
 	public static void main(String[] args) {
-
 		SuffixTree center = new SuffixTree();
-		//String s1 ="ACACCGATGAGTCTGTCACGCGATAGCATGACGCTGCACCCTATGCTCGATAGCATTGCGAC";
-		//String s1 ="ACACCGATGAGTCTGTCACGCGATAGCATGAC";
-		//String s1 ="ACCACAACACCACAACACCACCACAACACCACCAACCACCT";
 		String s1 ="ACACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
-		//String s1="GGGAGCCATGCATT";
 		s1=format(s1)+"$";
 		center.build(s1);
-		//center.print();
-
-		//System.out.println(String.valueOf(center.root.child));
-
-		//System.out.println(String.valueOf(center.root.child.chars));
-	/*
-		Node start=center.root.child.brother.child.child.child;
-		Integer[] startpos= (Integer[]) getNodeAllLeafSonLabel(start).toArray(new Integer[getNodeAllLeafSonLabel(start).size()]);
-		System.out.println(Arrays.toString(startpos));
-		System.out.println(getNodeString(start));
-	*/
-		//System.out.println(center.select("CACAAC"));
 		String word = "ACACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
 		word = word.toLowerCase();
 		System.out.println(Arrays.toString(center.selectPrefixForAlignment(word, 0)));
-
-		System.out.println("OK!");
 	}
 }

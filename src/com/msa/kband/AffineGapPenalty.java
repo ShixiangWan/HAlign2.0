@@ -1,6 +1,6 @@
 package com.msa.kband;
 
-public class AffineGapPenalty {//完成数组，a,b,c,p的初始化
+public class AffineGapPenalty {//Completion of the array, a, b, c, p initialization
     int m,n,g,h,mn,min,M,misM;
     static int [][] a,b,c,p;
     static int k;
@@ -10,11 +10,11 @@ public class AffineGapPenalty {//完成数组，a,b,c,p的初始化
         this.n=n+1;
         this.g=g;
         this.h=h;
-        this.k=k;
+        AffineGapPenalty.k=k;
         this.mn=mn;
         this.s=s;
         this.t=t;
-        min=-1073741824;//int类型最小值为-2的31次方即-2147483648,假设min=2的-30次方是负无穷
+        min=-1073741824; //negative infinity
         this.M = M;
         this.misM = misM;
     }
@@ -72,7 +72,7 @@ public class AffineGapPenalty {//完成数组，a,b,c,p的初始化
     }
 
     public int Init(){
-        int K=2*k+1+mn;//K为带宽
+        int K=2*k+1+mn;//K is the bandwidth
         InitA(K);
         InitB(K);
         InitC(K);

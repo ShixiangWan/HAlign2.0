@@ -34,7 +34,7 @@ public class KbandMSA {
         String outputfile = "/home/shixiang/output-extreme.txt";
         String outputDFS = "hdfs://localhost:9000/msa-extreme";
 		new KbandMSA().start(inputfile, outputfile, outputDFS);
-        System.out.println("程序运行时间："+(System.currentTimeMillis()-t));
+        System.out.println("Program running time: "+(System.currentTimeMillis()-t));
     }
 	
     public void start(String inputfile, String outputfile, String outputDFS) 
@@ -77,7 +77,8 @@ public class KbandMSA {
     		job.waitForCompletion(true);
     	}
         
-        //将第一个序列作为根，与其他每个序列进行双序列比对，保留第一个序列的比对结果s_out1
+        //The first sequence as a root, and each other with the sequence of the sequence alignment, 
+    	//the first sequence to retain the results of the comparison s_out1
         ArrayList<String> s_out1 = new ArrayList<>();
         ArrayList<String> s_out2 = new ArrayList<>();
         String sequence1 = s_val.get(0);
@@ -88,7 +89,8 @@ public class KbandMSA {
             s_out2.add(new String(RunAlignTwo.alignt));
         }
 
-        //统计第一个序列的比对结果，得到它的归总比对结果insertSpace1[]
+        //Statistics of the first sequence of the alignment results, 
+        //it is the result of the overall return of the insertSpace1[]
         int index;
         int insertSpace1[] = new int[sequenceLen1 + 1];
         for (String line2 : s_out1) {
@@ -106,7 +108,7 @@ public class KbandMSA {
             }
         }
 
-        //以第一条序列为中心序列，计算中心序列sequence1
+        //The center sequence sequence 1 is calculated with the first sequence as the center sequence
         StringBuilder stringBuilder = new StringBuilder();
         int insertSpaceLen1 = insertSpace1.length;
         for(int i=0; i<insertSpaceLen1; i++){
@@ -119,7 +121,8 @@ public class KbandMSA {
         }
         sequence1 = stringBuilder.toString();
 
-        //将归纳得到的sequence1再次与第一次比对结果比对，得到最终各序列比对结果存入文件
+        // Will be summarized by the sequence1 again compared with the results of the first match to get 
+        // the final sequence alignment results stored in the file
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputfile));
             for (int i=0; i<s_key.size(); i++) {
