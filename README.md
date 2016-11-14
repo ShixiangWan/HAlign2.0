@@ -31,3 +31,5 @@ hadoop jar MSA2.0.jar <input_file> <output_file> <dfs_path> <algorithm type>
 ##更新日志
 * 2016-09-07, version 0.1:
   * 完成基本功能。
+* 2016-11-14, version 0.1:
+  * 英文源程序注释
