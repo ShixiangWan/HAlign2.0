@@ -34,7 +34,7 @@ hadoop jar MSA2.0.jar <input_file> <output_file> <dfs_path> <algorithm type>
   * 完成基本功能。
 * 2016-11-14, version 0.1:
   * 英文源程序注释与中文注释版本分开
-* 2016-11-14, version 0.5:
+* 2016-11-25, version 0.5:
   * 修复蛋白质比对bug，并使蛋白质比对以多线程方式进行
   * 修复文件读取的相关bug
  
