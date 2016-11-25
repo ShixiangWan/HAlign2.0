@@ -8,7 +8,7 @@ Home page: http://lab.malab.cn/soft/halign/hadoop.html
 * Ubantu 16.04
 * Hadoop 2.7.2
 * JDK >= 1.7
-* Eclipse Mars
+* Intellij IDEA
 
 ##使用方法
 ####1. 如果您是单机使用用户：
@@ -33,4 +33,8 @@ hadoop jar MSA2.0.jar <input_file> <output_file> <dfs_path> <algorithm type>
 * 2016-09-07, version 0.1:
   * 完成基本功能。
 * 2016-11-14, version 0.1:
-  * 英文源程序注释
+  * 英文源程序注释与中文注释版本分开
+* 2016-11-14, version 0.5:
+  * 修复蛋白质比对bug，并使蛋白质比对以多线程方式进行
+  * 修复文件读取的相关bug
+ 
