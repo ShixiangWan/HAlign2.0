@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Wed Sep 07 17:08:47 CST 2016
+onejar.license.required=true
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=MSA2.0.jar
+manifest.mergeall=true
+manifest.mainclass=com.msa.main.Controller
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=
+includes=
