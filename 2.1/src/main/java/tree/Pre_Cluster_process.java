@@ -470,7 +470,9 @@ public class Pre_Cluster_process {
 
     public void Get_Cluster(String output, int line_number) throws IOException {
         int select_number = 0;
-        if (line_number < 10000) { // if the totle number is bigger than 100000 , we random select 10000 sequences
+        if (line_number < 100) { // if the totle number is bigger than 100000 , we random select 10000 sequences
+            select_number = line_number / 2;
+        } else if (line_number < 10000) { // if the totle number is bigger than 100000 , we random select 10000 sequences
             select_number = line_number / 10;
         } else if (10000 <= line_number && line_number <= 100000) {    // if the number is less than 100000 , we random select 1 of the 10 number sequences
             select_number = 1000;
@@ -515,8 +517,8 @@ public class Pre_Cluster_process {
 //        CountTheDistance(cluster_list, cluster_list_size, distance, A);//计算距离矩阵以及A
 //        AmendTheDistance(distance, A, cluster_list_size);//对距离矩阵进行修正
         String flag;
-        do {
-            flag = ClusterFromMatrix(distance, output, cluster_list, cluster_list_size, rdNum);
-        } while (flag.equals(null));
+        flag = ClusterFromMatrix(distance, output, cluster_list, cluster_list_size, rdNum);
+//        do {
+//        } while (flag.equals(null));
     }
 }

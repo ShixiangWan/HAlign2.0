@@ -3,6 +3,7 @@ package tree;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 class NeighbourJoining_Node {
@@ -77,13 +78,13 @@ public class NeighbourJoining {
     String subTree;//  返回进化子树
     String present_seq;
 
-    public void construct(ArrayList<String> seq_name, ArrayList<String> seq) throws IOException {//把子集合的序列名和序列数组作为参数传进来
+    public void construct(List<String> seq_name, List<String> seq) throws IOException {//把子集合的序列名和序列数组作为参数传进来
 
         int setsize = seq.size();//获取序列的条数
         double[][] distance = new double[setsize][setsize]; //设置子集合的距离矩阵
         double[] A = new double[setsize];//距离矩阵每行的和
-        ArrayList<NeighbourJoining_Node> LeaveNode_list = new ArrayList<NeighbourJoining_Node>();
-        for (int i = 0; i < setsize; i++) {//构建了叶子节点列表
+        ArrayList<NeighbourJoining_Node> LeaveNode_list = new ArrayList<>();
+        for (int i = 0; i < setsize; i++) {//构建叶子节点列表
             LeaveNode_list.add(new NeighbourJoining_Node(i, null, null, null, ""));
         }
 
@@ -125,8 +126,6 @@ public class NeighbourJoining {
             if (!Already_set.contains(min_distance.geti()) && !Already_set.contains(min_distance.getj())) {
                 LeaveNode_list.get(min_distance.geti()).Reset_Tree(seq_name.get(min_distance.geti()));//叶子节点添加子结构
                 LeaveNode_list.get(min_distance.getj()).Reset_Tree(seq_name.get(min_distance.getj()));
-                // LeaveNode_list.get(min_distance.geti()).Reset_name(seq_name.get(min_distance.geti()));//叶子节点添加序列名称
-                // LeaveNode_list.get(min_distance.getj()).Reset_name(seq_name.get(min_distance.getj()));
                 NeighbourJoining_Node InternalNode = new NeighbourJoining_Node(-1,//构建一个内部节点
                         null,
                         LeaveNode_list.get(min_distance.geti()),
@@ -259,7 +258,7 @@ public class NeighbourJoining {
         }
     }
 
-    public static void CountTheDistance(ArrayList<String> sequences, int lineNumber, double[][] distance, double[] A) throws IOException {//这个函数用来计算距离矩阵
+    public static void CountTheDistance(List<String> sequences, int lineNumber, double[][] distance, double[] A) throws IOException {//这个函数用来计算距离矩阵
         int i, j;
         double p;
         double temp;
@@ -269,10 +268,10 @@ public class NeighbourJoining {
             for (j = 0; j < lineNumber; j++) {
 
                 if (i < j) {
-                    p = JukeCantor((String) sequences.get(i), (String) sequences.get(j));
+                    p = JukeCantor(sequences.get(i), sequences.get(j));
                     p = 1.0 - 0.75 * p;
                     temp = Math.log(p);
-                    distance_temp = (double) (-0.75 * temp);   //根据公式计算距离
+                    distance_temp = -0.75 * temp;   //根据公式计算距离
                     distance[i][j] = distance_temp;
                 } else if (i == j) {
                     distance[i][j] = 0;//对角线上为0

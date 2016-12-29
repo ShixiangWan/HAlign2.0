@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import halign.protein.ProteinMSA;
-import halign.utils.FileUtils;
+import utils.MSAFileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -62,14 +62,14 @@ public class KbandMSA {
     		}
     	} else {
         	System.out.println(">>Clearing HDFS Path & uploading ...");
-			FileUtils fileUtils = new FileUtils();
-			fileUtils.clear_dfs_path(outputDFS);
-    		fileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
+			MSAFileUtils MSAFileUtils = new MSAFileUtils();
+			MSAFileUtils.clear_dfs_path(outputDFS);
+    		MSAFileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
     		
     		System.out.println(">>Map reducing ...");
     		Configuration conf = new Configuration();
     		conf.set("mapred.task.timeout", "0");
-    		Job job = new Job(conf, "msa_protein");
+			Job job = Job.getInstance(conf, "msa_kband");
     		job.setJarByClass(ProteinMSA.class);
     		job.setInputFormatClass(TextInputFormat.class);
     		job.setMapperClass(KbandMapper.class);

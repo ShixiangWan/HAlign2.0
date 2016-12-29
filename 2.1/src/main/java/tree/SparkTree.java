@@ -1,32 +1,52 @@
 package tree;
 
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.PairFunction;
+import scala.Tuple2;
 import utils.FormatUtils;
 import utils.MSAFileUtils;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MSATree {
+public class SparkTree {
     public static void main(String[] args) throws Exception {
-        String inputFile = "/home/shixiang/out.fasta";
+        String filename = "/home/shixiang/out.fasta";
+//        filename = "/home/shixiang/genome-out2.fasta";
         String outputFile = "/home/shixiang/tree.tre";
-        new MSATree().start(inputFile, outputFile);
+
+        SparkConf conf = new SparkConf().setAppName("SparkMSATree");
+        conf.setMaster("local[16]");
+        conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
+        conf.set("spark.kryoserializer.buffer.max", "2000m");
+        conf.registerKryoClasses(new Class[]{SparkTree.class});
+        JavaSparkContext jsc = new JavaSparkContext(conf);
+        new SparkTree().GenerateTree(jsc, filename, outputFile);
+        jsc.stop();
     }
 
-    public void start(String inputFile, String outputFile) throws Exception {
+    public void GenerateTree(JavaSparkContext jsc, String inputFile, String outputFile) throws Exception {
 
         String localPath = "";
         if (inputFile.contains("/")) {
             localPath = inputFile.substring(0, inputFile.lastIndexOf("/")+1);
             inputFile = inputFile.substring(inputFile.lastIndexOf("/")+1);
         }
+
         MSAFileUtils utils = new MSAFileUtils();
         utils.clear_local_path(new File(localPath + "HPTree_OutPut"));
 
-        System.out.println(">>(Local mode for tree) loading data ...");
+        System.out.println(">> (Spark mode for tree) loading data ...");
         long startTime = System.currentTimeMillis();
         FormatUtils formatUtils = new FormatUtils();
         formatUtils.formatKVFasta(localPath + inputFile, localPath + "inputKV");
@@ -43,7 +63,37 @@ public class MSATree {
         ClusterProcess clusterProcess = new ClusterProcess();
         clusterProcess.preProcess(localPath + "single_cluster_output");
         new File(localPath + "single_cluster_output").delete();
-        clusterProcess.kvProcess(localPath + "inputKV", localPath + "Cluster_OutPut");
+        //clusterProcess.kvProcess(local_path + "inputKV", local_path + "Cluster_OutPut");
+
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(localPath + "Cluster_OutPut"));
+        jsc.textFile("file://"+localPath + "inputKV").map(
+                (Function<String, String>) f -> {
+                    String value = f.trim();
+                    String[] value_temp = value.split("\t");
+                    String name = value_temp[0];
+                    String sequence = value_temp[1];
+                    String label = "";
+                    double min_distance = 100000;
+                    for (Set<ClusterProcess.cluster_data> set : ClusterProcess.sum_set) {
+                        Iterator iter = set.iterator();
+                        ClusterProcess.cluster_data data = (ClusterProcess.cluster_data) iter.next();
+                        double p = ClusterProcess.JukeCantor(sequence, data.sequence);
+                        p = 1.0 - 0.75 * p;
+                        double distance = (double) (int) (-0.75 * Math.log(p) * 1000) / 1000;
+                        if (distance < min_distance) {
+                            min_distance = distance;
+                            label = data.label;
+                        }
+                    }
+                    return label + "\t" + name + "\t" + sequence+"\n";
+                }).collect().forEach(l -> {
+                try {
+                    bufferedWriter.write(l);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        });
+        bufferedWriter.close();
         new File(localPath + "inputKV").delete();
         System.out.println((System.currentTimeMillis() - startTime) + "ms");
 
@@ -56,20 +106,16 @@ public class MSATree {
         System.out.println(">>construct phylogenetic tree ...");
         ////////////////////////////////////////////////////////////////////////////////////////
         new File(localPath + "HPTree_OutPut").mkdir();
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(localPath + "OnBalance_OutPut"));
-        String value;
-        List<String> balanceKey = new ArrayList<>();
-        List<String> balanceVal = new ArrayList<>();
-        while (bufferedReader.ready()) {
-            value = bufferedReader.readLine();
-            String [] list = value.split("\t");// 把三个字段分离出来
-            balanceKey.add(list[1]);
-            balanceVal.add(list[2]);
-        }
-        bufferedReader.close();
+        JavaPairRDD<String, String> balancePairRDD = jsc.textFile("file://"+localPath + "OnBalance_OutPut").mapToPair(
+                (PairFunction<String, String, String>) s -> {
+                    String [] list = s.split("\t");
+                    return new Tuple2(list[1], list[2]);
+                });
+        List<String> balanceKey = balancePairRDD.keys().collect();
+        List<String> balanceVal = balancePairRDD.values().collect();
 
         int loop;
-        if (allNum < 100) loop = 4;
+        if (allNum < 100) loop = 8;
         else loop = 32;
         int loopNum = allNum/loop;
         int position = 0;
@@ -94,6 +140,7 @@ public class MSATree {
         nj_summary.Summary();
 
         utils.clear_local_path(new File(localPath + "HPTree_OutPut"));
+        System.out.println(">>success! time cost: " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
     public class GetSubTreeThread implements Runnable {

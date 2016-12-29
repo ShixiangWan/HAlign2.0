@@ -17,7 +17,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import halign.utils.FileUtils;
+import utils.MSAFileUtils;
 
 public class ExtremeMSA {
 	private String filepath = ""; // 记录文件名称
@@ -40,14 +40,14 @@ public class ExtremeMSA {
 			Pi = new String[n];
 			Piname = new String[n];
 			System.out.println(">>Clearing HDFS Path & uploading ...");
-			FileUtils fileUtils = new FileUtils();
-			fileUtils.clear_dfs_path(outputDFS);
-			fileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
+			MSAFileUtils MSAFileUtils = new MSAFileUtils();
+			MSAFileUtils.clear_dfs_path(outputDFS);
+			MSAFileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
 			
 			System.out.println(">>Map reducing ...");
 			Configuration conf = new Configuration();
 			conf.set("mapred.task.timeout", "0");
-			Job job = new Job(conf, "msa_extreme");
+			Job job = Job.getInstance(conf, "msa_extreme");
 			job.setJarByClass(ExtremeMSA.class);
 			job.setInputFormatClass(TextInputFormat.class);
 			job.setMapperClass(ExtremeMapper.class);

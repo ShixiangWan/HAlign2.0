@@ -94,8 +94,7 @@ public class NeighbourJoining_Summary {
 				 int leave_index = 0;
 				 while(br.ready()){
 					 String[] line = br.readLine().split("\t");
-					// System.out.println(line[0]);
-				//	 System.out.println("The line length is :"+line.length);
+					 if (line.length < 2) continue;
 					 LeaveNode_list.add(new NeighbourJoiningSummary_Node(leave_index , null , null , null , line[1]));
 					 seq.add(line[0]);
 				 }
@@ -146,7 +145,6 @@ public class NeighbourJoining_Summary {
 		 
 		//更新完矩阵后，合并这两个节点， 1、两个均未出现过 2、一个出现过一个未出现过
 	     if(!Already_set.contains(min_distance.geti()) && !Already_set.contains(min_distance.getj())){
-	    	  
 	    	 NeighbourJoiningSummary_Node InternalNode = new NeighbourJoiningSummary_Node(-1,//构建一个内部节点
 	    			null,
 	    			LeaveNode_list.get(min_distance.geti()),

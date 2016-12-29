@@ -32,7 +32,6 @@ public class OnBalance {
     }
 
     public void Balance(int cluster_num, String local_path) throws IOException {
-        //System.out.println("cluster_num = " + cluster_num);
         int flag = 0;
         int iteratorTime = 0;
 
