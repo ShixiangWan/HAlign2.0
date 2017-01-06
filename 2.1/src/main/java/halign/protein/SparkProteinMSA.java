@@ -25,25 +25,25 @@ import java.util.List;
 public class SparkProteinMSA {
     public static void main(String[] args) {
 
-        String inputKVFile = args[0];
-        String outputfile = args[1];
+        String inputFile = "D:\\MASTER2016\\1.MSA2.0\\data\\protein.fasta";
+        String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\proteinSpark.fasta";
 
         SparkConf conf = new SparkConf().setAppName("SparkProteinMSA");
-//        conf.setMaster("local[16]");
+        conf.setMaster("local[16]");
         conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
         conf.set("spark.kryoserializer.buffer.max", "2000m");
         conf.registerKryoClasses(new Class[]{SparkProteinMSA.class});
         JavaSparkContext jsc = new JavaSparkContext(conf);
-        new SparkProteinMSA().start(jsc, inputKVFile, outputfile);
+        new SparkProteinMSA().start(jsc, inputFile, outputfile);
         jsc.stop();
     }
 
-    public void start(JavaSparkContext jsc, String inputKVFile, String outputfile) {
+    public void start(JavaSparkContext jsc, String inputFile, String outputfile) {
 
-        System.out.println(">>(Spark mode for Protein) Loading data ... " + inputKVFile);
+        System.out.println(">>(Spark mode for Protein) Loading data ... " + inputFile);
         long startTime = System.currentTimeMillis();
         FormatUtils formatUtils = new FormatUtils();
-        formatUtils.readFasta(inputKVFile, false);
+        formatUtils.readFasta(inputFile, false);
         List<String> fastaKeyList = formatUtils.getS_key();
         List<String> fastaValList = formatUtils.getS_val();
         final String firstVal = fastaValList.get(0);

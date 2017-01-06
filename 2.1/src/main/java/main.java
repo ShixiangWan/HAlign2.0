@@ -96,6 +96,7 @@ public class main {
                         JavaSparkContext jsc = new JavaSparkContext(conf);
                         new SparkDNAMSA().start(jsc, inputFile, outputFile);
                         jsc.stop();
+                        break;
                     case 1:
                         System.out.println(">>Running protein alignment as spark mode");
                         conf = new SparkConf().setAppName("SparkProteinMSA");
@@ -105,6 +106,7 @@ public class main {
                         jsc = new JavaSparkContext(conf);
                         new SparkProteinMSA().start(jsc, inputFile, outputFile);
                         jsc.stop();
+                        break;
                 }
                 long end = System.currentTimeMillis();
                 System.out.println(">>Cost time: "+(end - start)+"ms");
@@ -141,7 +143,7 @@ public class main {
 	    String version = "HAlign2.1.jar";
 		System.out.println("Kindly note: error params.");
         System.out.println();
-        System.out.println("1. if you are a command user, command is: java -jar "+version+" <mode> <input-file> <output-file> <algorithm>");
+        System.out.println("1. if you are a single core user, command is: java -jar "+version+" <mode> <input-file> <output-file> <algorithm>");
         System.out.println("mode: -localMSA, -localTree.");
         System.out.println("input-file: local fasta format file, required.");
         System.out.println("output-file: local fasta format file, just a file name, required.");
