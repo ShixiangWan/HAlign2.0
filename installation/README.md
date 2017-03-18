@@ -1,5 +1,5 @@
 
-## A quick installation of stand-alone version Hadoop, Spark
+## A Quick Installation of Stand-alone Hadoop, Spark
 
 ### 1. Preparation
 * JDK, such as 'jdk-8u111-linux-x64.tar.gz'
