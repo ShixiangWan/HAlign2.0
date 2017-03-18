@@ -10,13 +10,13 @@ tar -zxvf hadoop-2.7.3.tar.gz
 tar -zxvf spark-2.0.2-bin-hadoop2.7.tgz
 
 # MODIFY 1: YOUR INSTALLATION FOLDER
-export USER_HOME=/public/home/tjumalab/shixiangwan
+export INSTALLATION_HOME=/public/home/tjumalab/shixiangwan
 
 # set environment variable
-export JAVA_HOME=$USER_HOME/jdk1.8.0_111
-export SCALA_HOME=$USER_HOME/scala-2.12.0
-export HADOOP_HOME=$USER_HOME/hadoop-2.7.3
-export SPARK_HOME=$USER_HOME/spark-2.0.2-bin-hadoop2.7
+export JAVA_HOME=$INSTALLATION_HOME/jdk1.8.0_111
+export SCALA_HOME=$INSTALLATION_HOME/scala-2.12.0
+export HADOOP_HOME=$INSTALLATION_HOME/hadoop-2.7.3
+export SPARK_HOME=$INSTALLATION_HOME/spark-2.0.2-bin-hadoop2.7
 export PATH=$PATH:$JAVA_HOME/bin:$SCALA_HOME/bin:$SPARK_HOME/bin:$SPARK_HOME/sbin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
