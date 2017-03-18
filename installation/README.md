@@ -11,7 +11,7 @@ NOTE: please download these installation packages on their official websites.
 
 ### 2. Quick installation
 #### 2.1 modify your installation root path
-Line 13 & line 32~37 in 'install.sh' need to be modified based on your idea.
+Line 13 & line 32~37 in 'install.sh' need to be modified based on your installation root path.
 #### 2.2 installation
 `bash install.sh` or `sh install.sh`
  
