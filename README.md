@@ -1,9 +1,9 @@
 # HAlign2.0（MSA2.0）
 HAlign2.0是一款DNA/RNA/Protein序列的单机、Hadoop多序列比对软件。它基于Java语言开发，在Hadoop的并行计算环境中拥有较快的比对速度。它使用简便，即使您没有完整的Hadoop集群环境，亦可使用其单机命令开始试验。当您的序列文件较大（超过1GB），我们建议您还是在Hadoop集群上运行，节约时间。
 
-Home page: http://lab.malab.cn/soft/halign/hadoop.html
-
+Home page: http://lab.malab.cn/soft/halign/
 相关MPI实现：https://github.com/ShixiangWan/MPI-MSA
+相关GPU实现：https://github.com/ShixiangWan/CMSA2
 
 ## 开发环境
 
