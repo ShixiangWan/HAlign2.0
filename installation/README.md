@@ -15,7 +15,7 @@ Line 13 & line 32~37 in 'install.sh' need to be modified based on your installat
 #### 2.2 installation
 `bash install.sh` or `sh install.sh`
  
- That is all.
+Good luck!
 
 
 DATE: March 18, 2017.
