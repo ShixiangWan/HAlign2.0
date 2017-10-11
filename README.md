@@ -3,40 +3,40 @@ HAlign2.0 is a software based Java, which can align multiple DNA/RNA/Protein seq
 
 Home page: http://lab.malab.cn/soft/halign/hadoop.html
 
-## Development Environment
+# Development Environment
 
 * Ubantu 16.04
 * Hadoop 2.7.2
 * JDK >= 1.7
 * Intellij IDEA
 
-## Usage
-#### 1. Stand-alone mode
+# Usage
+### 1. Stand-alone mode
 ```
 # java -jar HAlign2.1.jar <mode> <input-file> <output-file> <algorithm>
 ```
   * mode: **-localMSA**, **-localTree**.
   * input-file: local fasta format file, required.
   * output-file: local fasta format file, just a file name, required.
-  * algorithm: sequence alignment algorithms, required for **-localMSA** mode, but none for **-localTree** mode. 0 represents the suffix tree algorithm, the fastest, but only for DNA/RNA; 1 represents the KBand algorithm based BLOSUM62 scoring matrix, only for Protein; 2 represents the KBand algorithm based on affine gap penalty, only for DNA/RNA; 3 represents the trie tree alignment algorithm, but slower and only for DNA/RNA; 4 represents the basic algorithm based the similarity matrix, the slowest and only for DNA/RNA. But it is the most accurate in the case of lower sequences similarity.
+  * algorithm: sequence alignment algorithms, required for **-localMSA** mode, but none for **-localTree** mode. **0** represents the suffix tree algorithm, the fastest, but only for DNA/RNA; **1** represents the KBand algorithm based BLOSUM62 scoring matrix, only for Protein; **2** represents the KBand algorithm based on affine gap penalty, only for DNA/RNA; **3** represents the trie tree alignment algorithm, but slower and only for DNA/RNA; **4** represents the basic algorithm based the similarity matrix, the slowest and only for DNA/RNA. But it is the most accurate in the case of lower sequences similarity.
   
-#### 2. Hadoop cluster mode
+### 2. Hadoop cluster mode
 ```
 # hadoop jar HAlign2.1.jar <mode> <input-file> <output-file> <algorithm>
 ```
-  * mode: -hadoopMSA.
+  * mode: **-hadoopMSA**.
   * input_file/output_file/algorithm type: same as stand-alone mode.
 
-#### 3. Spark cluster mode
+### 3. Spark cluster mode
 ```
 # spark-submit --class main HAlign2.1.jar <mode> <input-file> <output-file> <algorithm>
 ```
-  * mode: -sparkMSA, -sparkTree.
+  * mode: **-sparkMSA**, **-sparkTree**.
   * input-file: local fasta format file, required.
   * output-file: local fasta format file, just a file name, required.
-  * algorithm: sequence alignment algorithms, required for -sparkMSA mode, but none for -sparkTree mode. 0 represents the suffix tree algorithm, the fastest, but only for DNA/RNA; 1 represents the KBand algorithm based BLOSUM62 scoring matrix, only for Protein.
+  * algorithm: sequence alignment algorithms, required for **-sparkMSA** mode, but none for **-sparkTree** mode. **0** represents the suffix tree algorithm, the fastest, but only for DNA/RNA; **1** represents the KBand algorithm based BLOSUM62 scoring matrix, only for Protein.
   
-## Update
+# Update
 * 2016-09-07, version 2.0.0:
   * Basic functions.
 * 2016-11-14, version 2.1.0:
@@ -44,4 +44,5 @@ Home page: http://lab.malab.cn/soft/halign/hadoop.html
 * 2016-11-25, version 2.1.1:
   * Fix some bugs about protein sequences alignment on multi-thread technique.
   * Fix some bugs about file I/O.
- 
+* 2016-11-25, version 2.1.1:
+  * update README.
