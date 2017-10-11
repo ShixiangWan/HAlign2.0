@@ -5,7 +5,7 @@
 
 # Package Files #
 #*.jar
-*.war
+#*.war
 *.ear
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
