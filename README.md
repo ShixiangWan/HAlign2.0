@@ -1,14 +1,19 @@
-# HAlign2.0（MSA2.0）
-HAlign2.0 is a software based Java, which can align multiple DNA/RNA/Protein sequences in stand-alone mode or Hadoop cluster mode. Hadoop parallel computing environment has a faster alignment speed. Additionally, if a Hadoop cluster environment is not ready, you can use its stand-alone mode to start your work. But when your sequence files are large (more than 1GB), we recommend that you'd better to run on the Hadoop cluster to save valuable time.
+# HAlign-II
+HAlign-II is a software based Java, which can align multiple DNA/RNA/Protein sequences in stand-alone mode or Hadoop cluster mode. Hadoop parallel computing environment has a faster alignment speed. Additionally, if a Hadoop cluster environment is not ready, you can use its stand-alone mode to start your work. But when your sequence files are large (more than 1GB), we recommend that you'd better to run on the Hadoop cluster to save valuable time.
 
 Home page: http://lab.malab.cn/soft/halign/hadoop.html
+Reference: Shixiang Wan and Quan Zou, HAlign-II: efficient ultra-large multiple sequence alignment and phylogenetic tree reconstruction with distributed and parallel computing, Algorithms for Molecular Biology, 2017, 12:25. [view](https://almob.biomedcentral.com/articles/10.1186/s13015-017-0116-x)
+
+Other implementations:
+* MPI: https://github.com/ShixiangWan/MPI-MSA
+* CUDA: https://github.com/ShixiangWan/CMSA2
 
 # Development Environment
 
-* Ubantu 16.04
+* JDK 1.8
 * Hadoop 2.7.2
-* JDK >= 1.7
-* Intellij IDEA
+* Spark 2.0.2
+* Intellij IDEA (Maven)
 
 # Usage
 ### 1. Stand-alone mode
@@ -44,5 +49,5 @@ Home page: http://lab.malab.cn/soft/halign/hadoop.html
 * 2016-11-25, version 2.1.1:
   * Fix some bugs about protein sequences alignment on multi-thread technique.
   * Fix some bugs about file I/O.
-* 2016-11-25, version 2.1.1:
+* 2017-10-12, version 2.1.1:
   * update README.
