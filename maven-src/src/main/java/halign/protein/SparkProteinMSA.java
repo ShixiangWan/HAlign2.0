@@ -21,9 +21,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-
+/**
+ * Implementation of Multiple Sequence Alignment based on Smith Waterman Algorithm & Spark API.
+ *
+ * @author ShixiangWan
+ * @version 2.1.1
+ * */
 public class SparkProteinMSA {
-    public static void main(String[] args) {
+    static void main(String[] args) {
 
         String inputFile = "D:\\MASTER2016\\1.MSA2.0\\data\\protein.fasta";
         String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\proteinSpark.fasta";
@@ -38,7 +43,14 @@ public class SparkProteinMSA {
         jsc.stop();
     }
 
-    public void start(JavaSparkContext jsc, String inputFile, String outputfile) {
+    /**
+     * Run multiple sequence alignment.
+     *
+     * @param jsc java spark context, which can be initialized by <b>JavaSparkContext</b>.
+     * @param inputFile input file "path+name", fasta format.
+     * @param outputFile output file "path+name", fasta format.
+     * */
+    public void start(JavaSparkContext jsc, String inputFile, String outputFile) {
 
         System.out.println(">>(Spark mode for Protein) Loading data ... " + inputFile);
         long startTime = System.currentTimeMillis();
@@ -136,7 +148,7 @@ public class SparkProteinMSA {
         System.out.println(">>Saving final results ... ");
         List<Tuple2<String, String>> outDataList = fastaKeyJavaRDD.zip(fastaMSAOutJavaRDD).collect();
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputfile));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputFile));
             for (Tuple2 tuple2 : outDataList) {
                 bufferedWriter.write(tuple2._1.toString() + "\n");
                 bufferedWriter.write(tuple2._2.toString() + "\n");

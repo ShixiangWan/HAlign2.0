@@ -61,14 +61,21 @@ public class Example {
 	public static void main(String[] args) {
         try {
         	logger.info("Running example...");
-        	
-			Sequence s1 = SequenceParser.parse(loadP53Human());  
-			Sequence s2 = SequenceParser.parse(loadP53Mouse());
+			String st1 = "MEEPQSDPSVEPPLSQETFSDLWKLLPENNVLSPLPSQAMDDLMLSPDDIEQWFTEDPGPDEAPRMPEAAPRVAPAPAAPTPAAPAPAPSWPLSSSVPSQKTYQGSYGFRLGFLHSGTAKSVTCTYSPALNKMFCQLAKTCPVQLWVDSTPPPGTRVRAMAIYKQSQHMTEVVRRCPHHERCSDSDGLAPPQHLIRVEGNLRVEYLDDRNTFRHSVVVPYEPPEVGSDCTTIHYNYMCNSSCMGGMNRRPILTIITLEDSSGNLLGRNSFEVRVCACAGRDRRTEEENLRKKGEPHHELPPGSTKRALPNNTSSSPQPKKKPLDGEYFTLQIRGRERFEMFRELNEALELKDAQAGKEPGGSRAHSSHLKSKKGQSTSRHKKLMFKTEGPDSD";
+			String st2 = "MTAMEESQSDISLELPLSQETFSGLWKLLPPEDILPSPHCMDDLLLPQDVEEFFEGPSEALRVSGAPAAQDPVTETPGPAAPAPATPWPLSSFVPSQKTYQGNYGFHLGFLQSGTAKSVMCTYSPPLNKLFCQLAKTCPVQLWVSATPPAGSRVRAMAIYKKSQHMTEVVRRCPHHERCSDGDGLAPPQHLIRVEGNLYPEYLEDRQTFRHSVVVPYEPPEAGSEYTTIHYKYMCNSSCMGGMNRRPILTIITLEDSSGNLLGRDSFEVRVCACPGRDRRTEEENFRKKEVLCPELPPGSAKRALPTCTSASPPQKKKPLDGEYFTLKIRGRKRFEMFRELNEALELKDAHATEESGDSRAHSSYLKTKKGQSTSRHKKTMVKKVGPDSD";
+
+			/*Sequence s1 = SequenceParser.parse(loadP53Human());
+			Sequence s2 = SequenceParser.parse(loadP53Mouse());*/
+			Sequence s1 = SequenceParser.parse(st1);
+			Sequence s2 = SequenceParser.parse(st2);
 	        
 	        Alignment alignment = SmithWatermanGotoh.align(s1, s2, MatrixLoader.load("BLOSUM62"), 10f, 0.5f);
 	        
 	        System.out.println ( alignment.getSummary() );
 	        System.out.println ( new Pair().format(alignment) );
+            System.out.println("----------------------------");
+            System.out.println ( alignment.getSequence1() );
+            System.out.println ( alignment.getSequence2() );
 	        
 	        logger.info("Finished running example");
         } catch (Exception e) {

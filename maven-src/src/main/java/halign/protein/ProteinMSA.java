@@ -13,25 +13,38 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Implementation of Multiple Sequence Alignment based on Smith Waterman Algorithm.
+ *
+ * @author ShixiangWan
+ * @version 2.1.1
+ * @deprecated
+ * */
 public class ProteinMSA {
-    static ArrayList<String> s_key = new ArrayList<>();
-    static ArrayList<String> s_val = new ArrayList<>();
-    static ArrayList<String> s_out1 = new ArrayList<>();
-    static ArrayList<String> s_out2 = new ArrayList<>();
+    private static ArrayList<String> s_key = new ArrayList<>();
+    private static ArrayList<String> s_val = new ArrayList<>();
+    private static ArrayList<String> s_out1 = new ArrayList<>();
+    private static ArrayList<String> s_out2 = new ArrayList<>();
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         String inputFile = "/home/shixiang/protein1.fasta";
-        String outputfile = "/home/shixiang/out.txt";
-        new ProteinMSA().start(inputFile, outputfile);
+        String outputFile = "/home/shixiang/out.txt";
+        new ProteinMSA().start(inputFile, outputFile);
     }
 
-    public void start(String inputfile, String outputfile) {
-        System.out.println(">>Loading data ... " + inputfile);
+    /**
+     * Run multiple sequence alignment.
+     *
+     * @param inputFile input file "path+name", fasta format.
+     * @param outputFile output file "path+name", fasta format.
+     * */
+    public void start(String inputFile, String outputFile) {
+        System.out.println(">>Loading data ... " + inputFile);
         long startTime = System.currentTimeMillis();
 
         String line1;
         try {
-            BufferedReader brReader = new BufferedReader(new FileReader(inputfile));
+            BufferedReader brReader = new BufferedReader(new FileReader(inputFile));
 
             StringBuilder stringBuilder = new StringBuilder();
             while (brReader.ready()) {
@@ -55,20 +68,18 @@ public class ProteinMSA {
             e.printStackTrace();
         }
 
-
-        /*将第一条序列作为中心序列*/
+        //The first sequence is used as the center sequence.
         String sequence1 = s_val.get(0);
         int sequenceLen1 = sequence1.length();
         int sequence1_id = 0;
 
-        /*将sequence1序列作为根，与其他每个序列进行双序列比对，保留第一个序列的比对结果s_out1*/
-        int total_num = s_val.size(); // 序列总个数
-        /*初始化s_out1和s_out2*/
-        for (String line : s_val) {
+        // The "sequence1" is used as the "root", which compared with other sequences.
+        // The first alignment is preserved as "s_out1".
+        int total_num = s_val.size();
+        for (String ignored : s_val) {
             s_out1.add("");
             s_out2.add("");
         }
-        // 创建一个线程池
         System.out.println(">>MultiThread MSA ... ");
         int taskSize = 16;
         ExecutorService pool = Executors.newFixedThreadPool(taskSize);
@@ -78,10 +89,12 @@ public class ProteinMSA {
             pool.execute(new Thread(alignThread));
         }
         pool.shutdown();
-        while (!pool.isTerminated()) ;
+        while(!pool.isTerminated());
         System.out.println((System.currentTimeMillis() - startTime) + "ms");
 
-        /*统计中心序列的比对结果，得到它的归总比对结果centerSpaces,oneSpace[]*/
+        // Statistic the alignments with center sequence, and get the merge results:
+        // - centerSpaces: record the spaces in each alignment.
+        // - oneSpace[]: record the spaces in center alignment.
         int index;
         int oneSpaceLen = sequenceLen1 + 1;
         int oneSpace[] = new int[oneSpaceLen];
@@ -100,7 +113,8 @@ public class ProteinMSA {
                 }
             }
         }
-        /*以第一条序列为中心序列，计算中心序列sequence1*/
+
+        // Get the center alignment "sequence1".
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < oneSpaceLen; i++) {
             for (int j = 0; j < oneSpace[i]; j++) {
@@ -111,7 +125,6 @@ public class ProteinMSA {
             }
         }
         sequence1 = stringBuilder.toString();
-        /*清空list，降低空间复杂度*/
         s_val = null;
         s_out1 = null;
 
@@ -146,7 +159,7 @@ public class ProteinMSA {
 
         /*写入结果*/
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(outputfile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
             for (int i = 0; i < s_key.size(); i++) {
                 bw.write(s_key.get(i));
                 bw.newLine();
@@ -166,7 +179,7 @@ public class ProteinMSA {
     }
 
 
-    public class AlignThread implements Runnable {
+    private class AlignThread implements Runnable {
         private int id;
         private String sequence1;
         private String sequence2;

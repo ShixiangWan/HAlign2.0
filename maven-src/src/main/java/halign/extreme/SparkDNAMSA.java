@@ -10,8 +10,10 @@ import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
 import scala.Tuple2;
 import utils.FormatUtils;
+import utils.MSAFileUtils;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +21,16 @@ import java.util.List;
 public class SparkDNAMSA {
     public static void main(String[] args) {
 
-        String inputKVFile = args[0];
-        String outputfile = args[1];
+        String inputKVFile = "D:\\MASTER2016\\1.MSA2.0\\data\\genome0.fasta";
+        String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\genomeSpark.fasta";
 
         SparkConf conf = new SparkConf().setAppName("SparkDNAMSA");
-//        conf.setMaster("local[16]");
+        conf.setMaster("local[16]");
         conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
         conf.set("spark.kryoserializer.buffer.max", "2000m");
         conf.registerKryoClasses(new Class[]{SparkDNAMSA.class});
+        conf.registerKryoClasses(new Class[]{DNAPairAlign.class});
+        conf.registerKryoClasses(new Class[]{GenAlignOut.class});
         JavaSparkContext jsc = new JavaSparkContext(conf);
         new SparkDNAMSA().start(jsc, inputKVFile, outputfile);
         jsc.stop();
@@ -55,22 +59,17 @@ public class SparkDNAMSA {
             AlignSubstring alignSubstring = new AlignSubstring(suffixTree, fastaValList.get(i));
             nameList.add(alignSubstring.findCommonSubstrings());
         }
-        suffixTree = null;
         System.out.println((System.currentTimeMillis() - start) + "ms");
 
 
         JavaRDD<String> fastaValRDD = jsc.parallelize(fastaValList).cache();
-        fastaValList = null;
         final Broadcast<String> firstValBC = jsc.broadcast(firstVal);
         JavaPairRDD<int[], int[]> spacePairsRDD = fastaValRDD.zip(jsc.parallelize(nameList)).mapToPair(
                 (PairFunction<Tuple2<String, int[][]>, int[], int[]>) tuple2 -> {
                     DNAPairAlign pairAlign = new DNAPairAlign(firstValBC.value(), tuple2._1, tuple2._2, maxLength);
                     pairAlign.pwa();
-                    int[] se = pairAlign.get_spaceevery();
-                    int[] so = pairAlign.get_spaceother();
-                    return new Tuple2(se, so);
-                });
-        spacePairsRDD = spacePairsRDD.coalesce(16, false).cache();
+                    return new Tuple2(pairAlign.get_spaceevery(), pairAlign.get_spaceother());
+                }).cache();
 
         int firstSpaceArray[] = spacePairsRDD.keys().reduce(
                 (Function2<int[], int[], int[]>) (int1, int2) -> {
@@ -97,23 +96,25 @@ public class SparkDNAMSA {
         JavaRDD<String> fastaMSAOutJavaRDD = fastaValRDD.zip(spacePairsRDD).map(
                 (Function<Tuple2<String, Tuple2<int[], int[]>>, String>) t -> {
                     String pi1 = t._1().trim();
-                    int[] spaceevery = t._2()._1();
-                    int[] spaceother = t._2()._2();
+                    int[] spaceEvery = t._2()._1();
+                    int[] spaceOther = t._2()._2();
                     GenAlignOut genAlignOut = new GenAlignOut();
                     return genAlignOut.get_every_sequeces(firstVal0BC.value().trim(), pi1,
                             allNum, firstVal, firstVal.length(),
-                            firstSpaceArrayBC.value(), spaceevery, spaceother);
+                            firstSpaceArrayBC.value(), spaceEvery, spaceOther);
                 });
-        fastaMSAOutJavaRDD = fastaMSAOutJavaRDD.coalesce(16, false).cache();
+
+        List<String> fastaMSAOutList = fastaMSAOutJavaRDD.repartition(1).collect();
         System.out.println(">>" + (System.currentTimeMillis() - start) + "ms");
 
+
         System.out.println(">>Saving final results ... ");
-        List<String> pi_re_list = fastaMSAOutJavaRDD.collect();
+        new MSAFileUtils().clear_local_path(new File(outputfile));
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputfile));
             for (int i = 0; i < allNum; i++) {
                 bw.write(fastaKeyList.get(i) + "\n");
-                bw.write(pi_re_list.get(i) + "\n");
+                bw.write(fastaMSAOutList.get(i) + "\n");
             }
             bw.close();
         } catch (Exception ignored) {

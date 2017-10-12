@@ -2,32 +2,20 @@ package halign.center;
 ;
 
 /**
- * 自定义的系统类，包括常用的方法、变量等。
+ * Build Tree.
  *
- * @author 李慧妍，邹权
+ * @author Huiyan Li, Quan Zou
  */
 public class BuildTree {
 
-    Queue Q = new Queue();             //常用变量：队列Q
-    int idcounter = 1;                         //常用变量：结点的ID值加法器
+    private Queue Q = new Queue();             //常用变量：队列Q
+    private int idcounter = 1;                         //常用变量：结点的ID值加法器
 
-    /**
-     * 输入方法：从键盘读入一串字符串，返回该字符串
-     *
-     * @return 读入的字符串
-     * @throws IOException
-     */
     /*public String readStr() throws IOException {
         BufferedReader sb = new BufferedReader(new InputStreamReader(System.in));
         return sb.readLine();
     }
 
-    *//**
-     * 输入方法：从键盘读入一个整数，返回这个整数。
-     *
-     * @return 读入的整数
-     * @throws IOException
-     *//*
     public int readInt() throws IOException {
         String s = readStr();
         return Integer.parseInt(s);
@@ -38,7 +26,6 @@ public class BuildTree {
      * 处理的是本类中的Q对列，其中保存了记录Aho-Corasick处理结果信息的
      * Record类对象I（详见本类方法ACsearch()）。
      */
-
     public int[][] out() {
         Position p;          //Position类的变量，用于读取保存的位置
         Record I;            //Record类的变量，用于读取记录的信息
