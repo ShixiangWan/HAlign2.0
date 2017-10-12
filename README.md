@@ -1,7 +1,7 @@
 # HAlign-II
 HAlign-II is a software based Java, which can align multiple DNA/RNA/Protein sequences in stand-alone mode or Hadoop cluster mode. Hadoop parallel computing environment has a faster alignment speed. Additionally, if a Hadoop cluster environment is not ready, you can use its stand-alone mode to start your work. But when your sequence files are large (more than 1GB), we recommend that you'd better to run on the Hadoop cluster to save valuable time.
 
-Home page: http://lab.malab.cn/soft/halign/hadoop.html
+Home page: http://lab.malab.cn/soft/halign/hadoop.html   
 Reference: Shixiang Wan and Quan Zou, HAlign-II: efficient ultra-large multiple sequence alignment and phylogenetic tree reconstruction with distributed and parallel computing, Algorithms for Molecular Biology, 2017, 12:25. [view](https://almob.biomedcentral.com/articles/10.1186/s13015-017-0116-x)
 
 Other implementations:
