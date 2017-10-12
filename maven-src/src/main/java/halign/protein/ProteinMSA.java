@@ -7,6 +7,7 @@ import jaligner.matrix.MatrixLoader;
 import jaligner.matrix.MatrixLoaderException;
 import jaligner.util.SequenceParser;
 import jaligner.util.SequenceParserException;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,32 +15,28 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Implementation of Multiple Sequence Alignment based on Smith Waterman Algorithm.
+ * Implementation of Protein Multiple Sequence Alignment based on Smith Waterman Algorithm.
  *
  * @author ShixiangWan
- * @version 2.1.1
- * @deprecated
  * */
 public class ProteinMSA {
+
+    public static Logger logger = Logger.getLogger(ProteinMSA.class);
+
     private static ArrayList<String> s_key = new ArrayList<>();
     private static ArrayList<String> s_val = new ArrayList<>();
     private static ArrayList<String> s_out1 = new ArrayList<>();
     private static ArrayList<String> s_out2 = new ArrayList<>();
 
-    static void main(String[] args) {
-        String inputFile = "/home/shixiang/protein1.fasta";
-        String outputFile = "/home/shixiang/out.txt";
-        new ProteinMSA().start(inputFile, outputFile);
-    }
-
     /**
-     * Run multiple sequence alignment.
+     * Run protein multiple sequence alignment.
      *
      * @param inputFile input file "path+name", fasta format.
      * @param outputFile output file "path+name", fasta format.
      * */
     public void start(String inputFile, String outputFile) {
-        System.out.println(">>Loading data ... " + inputFile);
+        logger.info("Loading data ... " + inputFile);
+
         long startTime = System.currentTimeMillis();
 
         String line1;
@@ -80,7 +77,7 @@ public class ProteinMSA {
             s_out1.add("");
             s_out2.add("");
         }
-        System.out.println(">>MultiThread MSA ... ");
+        logger.info("MultiThread MSA ... ");
         int taskSize = 16;
         ExecutorService pool = Executors.newFixedThreadPool(taskSize);
         for (int i = 0; i < total_num; i++) {
@@ -90,7 +87,7 @@ public class ProteinMSA {
         }
         pool.shutdown();
         while(!pool.isTerminated());
-        System.out.println((System.currentTimeMillis() - startTime) + "ms");
+        logger.info("Aligned, " + (System.currentTimeMillis() - startTime) + "ms");
 
         // Statistic the alignments with center sequence, and get the merge results:
         // - centerSpaces: record the spaces in each alignment.
@@ -128,20 +125,23 @@ public class ProteinMSA {
         s_val = null;
         s_out1 = null;
 
-        System.out.println(">>Merging sequences ... ");
-        /*根据centerSpace，oneSpace和s_out2合并差异数组，对齐所有序列*/
+        // Merge array based on "centerSpace", "oneSpace" and "s_out2",
+        // and align all sequences.
+        logger.info("Merging sequences ... ");
         for (int i = 0; i < total_num; i++) {
             String line = s_out2.get(i);
-            int position = 0; // 用来记录插入差异空格的位置
+            // Record the position of inserted spaces.
+            int position = 0;
             for (int j = 0; j < oneSpaceLen; j++) {
                 int gap = oneSpace[j] - centerSpaces[i][j];
                 position += centerSpaces[i][j];
                 if (gap > 0) {
                     if (position < line.length()) {
-                        /*正常情况下插入空格*/
+                        // Insert spaces.
                         line = line.substring(0, position).concat(insert(gap)).concat(line.substring(position));
                     } else {
-                        /*对于有的序列，超出了比对范围，此时需要截取并中断空格插入*/
+                        // For some special sequences out of limited length, which need to
+                        // be cut off and broken off insertion.
                         if (line.length() > sequence1.length()) {
                             line = line.substring(0, sequence1.length());
                         }
@@ -150,14 +150,16 @@ public class ProteinMSA {
                 }
                 position += gap + 1;
             }
-            /*有的特殊序列插入空格后依旧不满足相等条件，在它们后面补空格符*/
+
+            // Some special sequences is not equal to others after inserting spaces,
+            // which need to add some extra spaces.
             if (line.length() < sequence1.length()) {
                 line = line.concat(insert(sequence1.length() - line.length()));
             }
             s_out2.set(i, line);
         }
 
-        /*写入结果*/
+        // Save alignment to hard disk.
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
             for (int i = 0; i < s_key.size(); i++) {
@@ -175,7 +177,7 @@ public class ProteinMSA {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println((System.currentTimeMillis() - startTime) + "ms");
+        logger.info("Saved, " + (System.currentTimeMillis() - startTime) + "ms");
     }
 
 

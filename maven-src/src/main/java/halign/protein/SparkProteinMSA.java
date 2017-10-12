@@ -5,7 +5,7 @@ import jaligner.Sequence;
 import jaligner.SmithWatermanGotoh;
 import jaligner.matrix.MatrixLoader;
 import jaligner.util.SequenceParser;
-import org.apache.spark.SparkConf;
+import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -22,26 +22,13 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Implementation of Multiple Sequence Alignment based on Smith Waterman Algorithm & Spark API.
+ * Implementation of Protein Multiple Sequence Alignment based on Smith Waterman Algorithm & Spark API.
  *
  * @author ShixiangWan
- * @version 2.1.1
  * */
 public class SparkProteinMSA {
-    static void main(String[] args) {
 
-        String inputFile = "D:\\MASTER2016\\1.MSA2.0\\data\\protein.fasta";
-        String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\proteinSpark.fasta";
-
-        SparkConf conf = new SparkConf().setAppName("SparkProteinMSA");
-        conf.setMaster("local[16]");
-        conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-        conf.set("spark.kryoserializer.buffer.max", "2000m");
-        conf.registerKryoClasses(new Class[]{SparkProteinMSA.class});
-        JavaSparkContext jsc = new JavaSparkContext(conf);
-        new SparkProteinMSA().start(jsc, inputFile, outputfile);
-        jsc.stop();
-    }
+    private static Logger logger = Logger.getLogger(SparkProteinMSA.class);
 
     /**
      * Run multiple sequence alignment.
@@ -51,8 +38,8 @@ public class SparkProteinMSA {
      * @param outputFile output file "path+name", fasta format.
      * */
     public void start(JavaSparkContext jsc, String inputFile, String outputFile) {
+        logger.info("(Spark mode for Protein) Loading data ... " + inputFile);
 
-        System.out.println(">>(Spark mode for Protein) Loading data ... " + inputFile);
         long startTime = System.currentTimeMillis();
         FormatUtils formatUtils = new FormatUtils();
         formatUtils.readFasta(inputFile, false);
@@ -66,7 +53,7 @@ public class SparkProteinMSA {
         fastaKeyJavaRDD = fastaKeyJavaRDD.coalesce(2, true);
 
         /*generate map: out2 -> out1 */
-        System.out.println(">>MultiThread MSA ... ");
+        logger.info("MultiThread MSA ... ");
         int firstValLen1 = firstVal.length() + 1;
         final Broadcast<String> fastaFirstValBC = jsc.broadcast(firstVal);
         /*key is not changed, but value is calculated as int[] contains spaces*/
@@ -109,7 +96,7 @@ public class SparkProteinMSA {
         System.out.println((System.currentTimeMillis() - startTime) + "ms");
 
         /*merge msa out*/
-        System.out.println(">>Converting results ... ");
+        logger.info("Converting results ... ");
         final String firstValFinal = firstVal0;
         JavaRDD<String> fastaMSAOutJavaRDD = fastaMSADataJavaPairRDD.map(
                 (Function<Tuple2<String, int[]>, String>) stringTuple2 -> {
@@ -145,7 +132,7 @@ public class SparkProteinMSA {
 
         System.out.println((System.currentTimeMillis() - startTime) + "ms");
 
-        System.out.println(">>Saving final results ... ");
+        logger.info("Saving final results ... ");
         List<Tuple2<String, String>> outDataList = fastaKeyJavaRDD.zip(fastaMSAOutJavaRDD).collect();
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputFile));

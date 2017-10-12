@@ -68,7 +68,8 @@ public class main {
                         new ExtremeMSA().start(inputFile, outputFile, outputDFS);
                         break;
                     case 1:
-                        logger.info("Sorry, protein alignment as hadoop mode had been canceled. You may use Spark mode instead.");
+                        logger.info("Sorry, protein alignment as hadoop mode had been canceled. " +
+                                "You may use Spark mode instead.");
                         break;
                     case 2:
                         logger.info("Running kband alignment as hadoop mode");
