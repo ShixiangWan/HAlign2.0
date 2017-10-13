@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import halign.protein.ProteinMSA;
+import halign.smithwaterman.ProteinMSA;
 import utils.MSAFileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -23,7 +23,7 @@ public class KbandMSA {
 	static ArrayList<String> s_key = new ArrayList<>();
 	static ArrayList<String> s_val = new ArrayList<>();
 	public static void main(String[] args) {
-		String inputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\protein.fasta";
+		String inputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\smithwaterman.fasta";
 		String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\output-kband.txt";
 		try {
 			new KbandMSA().start(inputfile, outputfile, null);

@@ -21,7 +21,7 @@ package jaligner;
 import java.io.Serializable;
 
 /**
- * A basic (nucleic or protein) sequence. It's a wrapper to {@link String}.
+ * A basic (nucleic or smithwaterman) sequence. It's a wrapper to {@link String}.
  *
  * @author Ahmed Moustafa (ahmed@users.sf.net)
  */
@@ -38,7 +38,7 @@ public class Sequence implements Serializable {
     public static final int NUCLEIC = 0;
     
     /**
-     * Sequence type protein.
+     * Sequence type smithwaterman.
      */
 	public static final int PROTEIN = 1;
 	
@@ -143,7 +143,7 @@ public class Sequence implements Serializable {
 	}
     
     /**
-     * Returns the sequence type (nucleic or protein) 
+     * Returns the sequence type (nucleic or smithwaterman)
      * @return Returns the type 
      */
     public int getType() {
@@ -151,7 +151,7 @@ public class Sequence implements Serializable {
     }
     
     /**
-     * Sets the sequence type (nucleic or protein)
+     * Sets the sequence type (nucleic or smithwaterman)
      * @param type The type to set
      */
     public void setType(int type) {

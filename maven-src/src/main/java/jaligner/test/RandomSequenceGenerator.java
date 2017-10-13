@@ -21,7 +21,7 @@ package jaligner.test;
 import java.util.Random;
 
 /**
- * This class contains a random generator for protein sequences.
+ * This class contains a random generator for smithwaterman sequences.
  * 
  * @author Bram Minnaert
  */
@@ -64,7 +64,7 @@ public class RandomSequenceGenerator {
     }
 
     /**
-     * Displays 10 random protein sequences with length 50.
+     * Displays 10 random smithwaterman sequences with length 50.
      * @param args no args
      */
     public static void main(String[] args) {

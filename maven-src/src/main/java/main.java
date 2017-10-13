@@ -1,10 +1,10 @@
-import halign.center.MatrixMSA;
-import halign.center.TreeMSA;
-import halign.extreme.ExtremeMSA;
-import halign.extreme.SparkDNAMSA;
+import halign.centerstar.MatrixMSA;
+import halign.centerstar.TreeMSA;
+import halign.suffix.ExtremeMSA;
+import halign.suffix.SparkDNAMSA;
 import halign.kband.KbandMSA;
-import halign.protein.ProteinMSA;
-import halign.protein.SparkProteinMSA;
+import halign.smithwaterman.ProteinMSA;
+import halign.smithwaterman.SparkProteinMSA;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -38,7 +38,7 @@ public class main {
                         new ExtremeMSA().start(inputFile, outputFile, null);
                         break;
                     case 1:
-                        logger.info("Running protein alignment as single mode");
+                        logger.info("Running smithwaterman alignment as single mode");
                         new ProteinMSA().start(inputFile, outputFile);
                         break;
                     case 2:
@@ -68,7 +68,7 @@ public class main {
                         new ExtremeMSA().start(inputFile, outputFile, outputDFS);
                         break;
                     case 1:
-                        logger.info("Sorry, protein alignment as hadoop mode had been canceled. " +
+                        logger.info("Sorry, smithwaterman alignment as hadoop mode had been canceled. " +
                                 "You may use Spark mode instead.");
                         break;
                     case 2:
@@ -103,7 +103,7 @@ public class main {
                         jsc.stop();
                         break;
                     case 1:
-                        logger.info("Running protein alignment as spark mode");
+                        logger.info("Running smithwaterman alignment as spark mode");
                         conf = new SparkConf().setAppName("SparkProteinMSA");
                         conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
                         conf.set("spark.kryoserializer.buffer.max", "2000m");
