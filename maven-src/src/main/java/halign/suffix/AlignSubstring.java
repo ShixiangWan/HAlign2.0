@@ -3,17 +3,17 @@ package halign.suffix;
 import java.util.ArrayList;
 
 public class AlignSubstring {
-	SuffixTree center_tree;
+	SuffixTree centerTree;
 	String si;
 	public AlignSubstring(SuffixTree c, String i){
-		center_tree=c;
+		centerTree = c;
 		si=i;
 	}
 	public int[][] findCommonSubstrings(){
 		int index = 0;
-		int totalmatch = 0;
-		String seq=si;
-		SuffixTree st1=center_tree;
+		int totalMatch = 0;
+		String seq = si;
+		SuffixTree st1 = centerTree;
 		ArrayList<Integer> result = new ArrayList();
 		while (index <seq.length()){
 			int[] a = st1.selectPrefixForAlignment(seq, index);
@@ -22,7 +22,7 @@ public class AlignSubstring {
 				result.add(index);
 				result.add(a[1]);
 				index += a[1];
-				totalmatch += a[1];
+				totalMatch += a[1];
 			} else if (a[1] > 0)
 				index += a[1];
 			else
