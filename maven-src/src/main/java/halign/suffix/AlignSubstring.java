@@ -12,22 +12,21 @@ public class AlignSubstring {
 
 	public int[][] findCommonSubstrings(){
 		int index = 0;
-		int totalMatch = 0;
-		String seq = sequence;
-		SuffixTree st1 = suffixTree;
+		//int totalMatch = 0;
 		ArrayList<Integer> result = new ArrayList();
-		while (index <seq.length()){
-			int[] a = st1.selectPrefixForAlignment(seq, index);
+		while (index < sequence.length()){
+			int[] a = suffixTree.selectPrefixForAlignment(sequence, index);
 			if (a[1] > Math.abs(a[0] - index)) {
 				result.add(a[0]);
 				result.add(index);
 				result.add(a[1]);
 				index += a[1];
-				totalMatch += a[1];
-			} else if (a[1] > 0)
-				index += a[1];
-			else
-				index++;
+				//totalMatch += a[1];
+			} else if (a[1] > 0) {
+                index += a[1];
+            } else {
+                index ++;
+            }
 		}
 		int[][] tmp = new int[3][result.size() / 3];
 		int k = 0;
