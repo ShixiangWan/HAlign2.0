@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class AlignSubstring {
 	SuffixTree suffixTree;
 	String sequence;
+
 	public AlignSubstring(SuffixTree suffixTree, String sequence){
 		this.suffixTree = suffixTree;
         this.sequence = sequence;

@@ -732,29 +732,29 @@ public class SuffixTree {
 
 	public static void main(String[] args) {
 
-		SuffixTree center = new SuffixTree();
+		SuffixTree suffixTree = new SuffixTree();
 		//String s1 ="ACACCGATGAGTCTGTCACGCGATAGCATGACGCTGCACCCTATGCTCGATAGCATTGCGAC";
 		//String s1 ="ACACCGATGAGTCTGTCACGCGATAGCATGAC";
 		//String s1 ="ACCACAACACCACAACACCACCACAACACCACCAACCACCT";
 		String s1 ="ACACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
 		//String s1="GGGAGCCATGCATT";
-		s1=format(s1)+"$";
-		center.build(s1);
-		center.print();
+		s1 = format(s1)+"$";
+		suffixTree.build(s1);
+		//suffixTree.print();
 
 		//System.out.println(String.valueOf(centerstar.root.child));
 
 		//System.out.println(String.valueOf(centerstar.root.child.chars));
-	/*
-		Node start=centerstar.root.child.brother.child.child.child;
+
+		/*Node start=centerstar.root.child.brother.child.child.child;
 		Integer[] startpos= (Integer[]) getNodeAllLeafSonLabel(start).toArray(new Integer[getNodeAllLeafSonLabel(start).size()]);
 		System.out.println(Arrays.toString(startpos));
-		System.out.println(getNodeString(start));
-	*/
+		System.out.println(getNodeString(start));*/
+
 		//System.out.println(centerstar.select("CACAAC"));
-		String word = "ACACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
+		String word = "ACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
 		word = word.toLowerCase();
-		System.out.println(Arrays.toString(center.selectPrefixForAlignment(word, 0)));
+		System.out.println(Arrays.toString(suffixTree.selectPrefixForAlignment(word, 0)));
 
 		System.out.println("OK!");
 	}
