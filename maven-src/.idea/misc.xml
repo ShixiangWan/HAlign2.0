@@ -14,7 +14,7 @@
     <option name="OPTION_DEPRECATED_LIST" value="true" />
     <option name="OTHER_OPTIONS" value="-encoding utf-8 -charset utf-8" />
     <option name="HEAP_SIZE" />
-    <option name="LOCALE" />
+    <option name="LOCALE" value="en_US" />
     <option name="OPEN_IN_BROWSER" value="true" />
     <option name="OPTION_INCLUDE_LIBS" value="false" />
   </component>

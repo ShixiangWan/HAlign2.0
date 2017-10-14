@@ -1,8 +1,8 @@
 
-halign.center
-halign.extreme
+halign.centerstar
+halign.suffix
 halign.kband
-halign.protein
+halign.smithwaterman
 jaligner
 jaligner.example
 jaligner.formats
