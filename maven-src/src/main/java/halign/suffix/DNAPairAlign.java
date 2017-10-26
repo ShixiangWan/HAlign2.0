@@ -1,13 +1,5 @@
 package halign.suffix;
 
-
-/*
-public class DNAPairAlign {
-
-}
-package multiple_sequence_alignment;
-*/
-
 public class DNAPairAlign {
     String center;
     String si;
@@ -36,14 +28,15 @@ public class DNAPairAlign {
         return Spaceother;
     }
     /*===========================================*/
-    public DNAPairAlign(String c, String i, int [][] n, int length){
-        center=c;
-        si=i;
-        name=n;
-        Spaceother_len=length;
-        Spaceevery = new int[center.length() + 1];// 存放中心序列分别与其他序列比对时增加的空格的位置
-        Spaceother = new int[Spaceother_len + 1];// 存放其他序列与中心序列比对时增加的空格的位置
+    public DNAPairAlign(String center, String si, int[][] name, int Spaceother_len){
+        this.center = center;
+        this.si = si;
+        this.name = name;
+        this.Spaceother_len = Spaceother_len;
+        this.Spaceevery = new int[center.length() + 1];// 存放中心序列分别与其他序列比对时增加的空格的位置
+        this.Spaceother = new int[Spaceother_len + 1];// 存放其他序列与中心序列比对时增加的空格的位置
     }
+
     public void pwa() {
         prealign();
         for (int j = 1; j < name[0].length; j++) {

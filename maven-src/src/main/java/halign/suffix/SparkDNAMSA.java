@@ -1,5 +1,6 @@
 package halign.suffix;
 
+import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -19,27 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SparkDNAMSA {
-    public static void main(String[] args) {
 
-        String inputKVFile = "D:\\MASTER2016\\1.MSA2.0\\data\\genome0.fasta";
-        String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\genomeSpark.fasta";
-
-        SparkConf conf = new SparkConf().setAppName("SparkDNAMSA");
-        conf.setMaster("local[16]");
-        conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-        conf.set("spark.kryoserializer.buffer.max", "2000m");
-        conf.registerKryoClasses(new Class[]{SparkDNAMSA.class});
-        conf.registerKryoClasses(new Class[]{DNAPairAlign.class});
-        conf.registerKryoClasses(new Class[]{GenAlignOut.class});
-        JavaSparkContext jsc = new JavaSparkContext(conf);
-        new SparkDNAMSA().start(jsc, inputKVFile, outputfile);
-        jsc.stop();
-    }
-
+    private static Logger logger = Logger.getLogger(SparkDNAMSA.class);
 
     public void start(JavaSparkContext jsc, String inputKVFile, String outputfile) {
 
-        System.out.println(">>(Spark mode for DNA) Loading data ... " + inputKVFile);
+        logger.info("(Spark mode for DNA) Loading data ... " + inputKVFile);
+
         long start = System.currentTimeMillis();
         FormatUtils formatUtils = new FormatUtils();
         formatUtils.readFasta(inputKVFile, true);
@@ -48,10 +35,10 @@ public class SparkDNAMSA {
         List<String> fastaKeyList = formatUtils.getS_key();
         List<String> fastaValList = formatUtils.getS_val();
         final String firstVal = fastaValList.get(0);
-        System.out.println((System.currentTimeMillis() - start) + "ms");
 
+        logger.info((System.currentTimeMillis() - start) + "ms");
+        logger.info("MultiThread MSA ... ");
 
-        System.out.println(">>MultiThread MSA ... ");
         SuffixTree suffixTree = new SuffixTree();
         suffixTree.build(firstVal + "$");
         List<int[][]> nameList = new ArrayList<>();

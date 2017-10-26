@@ -489,6 +489,7 @@ public class SuffixTree {
 	/**
 	 * 查找给定字符串的最长前缀，并返回其alignment效果最好的起始位置和长度，返回(pos,len)对
 	 * wordstartpos是输入word在原始序列中开始的位置
+     *
 	 * @param word
 	 * @return
 	 */
@@ -511,7 +512,6 @@ public class SuffixTree {
 				while (null != start) {
 					// 比较当前节点指定位置(index)的字符是否与待查找字符一致
 					// 由于是遍历子节点，所以如果不匹配换个子节点继续
-
 					if (start.chars.length>index&&start.chars[index] == chars[i]) {
 						index++;
 						break;
@@ -591,7 +591,7 @@ public class SuffixTree {
 		//i到头了
 
 
-		Integer[] startpos= (Integer[]) getNodeAllLeafSonLabel(start).toArray(new Integer[getNodeAllLeafSonLabel(start).size()]);
+		Integer[] startpos = (Integer[]) getNodeAllLeafSonLabel(start).toArray(new Integer[getNodeAllLeafSonLabel(start).size()]);
 		int mindis=Integer.MAX_VALUE;
 		int pos_j=-1;
 		for(int j=0;j<startpos.length;j++){
@@ -736,7 +736,7 @@ public class SuffixTree {
 		//String s1 ="ACACCGATGAGTCTGTCACGCGATAGCATGACGCTGCACCCTATGCTCGATAGCATTGCGAC";
 		//String s1 ="ACACCGATGAGTCTGTCACGCGATAGCATGAC";
 		//String s1 ="ACCACAACACCACAACACCACCACAACACCACCAACCACCT";
-		String s1 ="ACACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
+		String s1 ="ACTDGDG";
 		//String s1="GGGAGCCATGCATT";
 		s1 = format(s1)+"$";
 		suffixTree.build(s1);
@@ -752,9 +752,13 @@ public class SuffixTree {
 		System.out.println(getNodeString(start));*/
 
 		//System.out.println(centerstar.select("CACAAC"));
-		String word = "ACCGATGAGTCTGTCACGCGATAGCTCGACGCTGCACCCTATGCTCGATAGCATTGCGACC";
+		String word = "AGTDGDG";
 		word = word.toLowerCase();
 		System.out.println(Arrays.toString(suffixTree.selectPrefixForAlignment(word, 0)));
+
+        AlignSubstring alignSubstring = new AlignSubstring(suffixTree, word);
+        System.out.println(Arrays.toString(suffixTree.selectPrefixForAlignment(word, 0)));
+        int[][] findCommonSubstrings = alignSubstring.findCommonSubstrings();
 
 		System.out.println("OK!");
 	}

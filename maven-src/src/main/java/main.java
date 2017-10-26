@@ -94,7 +94,7 @@ public class main {
                 switch (method) {
                     case 0:
                         logger.info("Running suffix tree alignment as spark mode");
-                        SparkConf conf = new SparkConf().setAppName("SparkDNAMSA");
+                        SparkConf conf = new SparkConf().setAppName("SparkSuffixAutomation");
                         conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
                         conf.set("spark.kryoserializer.buffer.max", "2000m");
                         conf.registerKryoClasses(new Class[]{SparkDNAMSA.class});
