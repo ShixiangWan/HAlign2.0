@@ -1,8 +1,5 @@
-package halign.suffix;
+package halign.suffixtree;
 
-import scala.Tuple2;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,14 +1,5 @@
 package halign.kband;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import halign.smithwaterman.ProteinMSA;
-import utils.MSAFileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -18,59 +9,38 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import utils.HDFSUtils;
+import utils.IOUtils;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class KbandMSA {
-	static ArrayList<String> s_key = new ArrayList<>();
-	static ArrayList<String> s_val = new ArrayList<>();
-	public static void main(String[] args) {
-		String inputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\smithwaterman.fasta";
-		String outputfile = "D:\\MASTER2016\\1.MSA2.0\\data\\output-kband.txt";
-		try {
-			new KbandMSA().start(inputfile, outputfile, null);
-		} catch (ClassNotFoundException | IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
-    public void start(String inputfile, String outputfile, String outputDFS) 
+
+	static List<String> s_key = new ArrayList<>();
+	static List<String> s_val = new ArrayList<>();
+
+    public void start(String inputFile, String outputFile, String outputDFS)
     		throws IOException, ClassNotFoundException, InterruptedException {
     	if (outputDFS == null) {
-    		String line;
-    		try {
-				BufferedReader brReader = new BufferedReader(new FileReader(inputfile));
-
-				StringBuilder stringBuilder = new StringBuilder();
-				while(brReader.ready()) {
-					line = brReader.readLine();
-					if (line.equals("")) continue;
-					if (line.charAt(0) == '>') {
-						s_key.add(line);
-						if (stringBuilder.length() != 0) {
-							s_val.add(stringBuilder.toString());
-							stringBuilder.setLength(0);
-						}
-					} else {
-						stringBuilder.append(line);
-					}
-				}
-				if (stringBuilder.length() != 0) {
-					s_val.add(stringBuilder.toString());
-				}
-				brReader.close();
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
+			IOUtils formatUtils = new IOUtils();
+			formatUtils.readFasta(inputFile, true);
+			s_key = formatUtils.getS_key();
+			s_val = formatUtils.getS_val();
     	} else {
         	System.out.println(">>Clearing HDFS Path & uploading ...");
-			MSAFileUtils MSAFileUtils = new MSAFileUtils();
+			HDFSUtils MSAFileUtils = new HDFSUtils();
 			MSAFileUtils.clear_dfs_path(outputDFS);
-    		MSAFileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
+    		MSAFileUtils.local_to_dfs(inputFile, outputDFS + "/input/input.txt");
     		
     		System.out.println(">>Map reducing ...");
     		Configuration conf = new Configuration();
     		conf.set("mapred.task.timeout", "0");
 			Job job = Job.getInstance(conf, "msa_kband");
-    		job.setJarByClass(ProteinMSA.class);
+    		job.setJarByClass(KbandMSA.class);
     		job.setInputFormatClass(TextInputFormat.class);
     		job.setMapperClass(KbandMapper.class);
     		job.setMapOutputKeyClass(NullWritable.class);
@@ -126,7 +96,7 @@ public class KbandMSA {
 
         /*将归纳得到的sequence1再次与第一次比对结果比对，得到最终各序列比对结果存入文件*/
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(outputfile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile));
             for (int i=0; i<s_key.size(); i++) {
                 bw.write(s_key.get(i));
                 bw.newLine();

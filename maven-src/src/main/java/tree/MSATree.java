@@ -1,7 +1,7 @@
 package tree;
 
-import utils.FormatUtils;
-import utils.MSAFileUtils;
+import utils.IOUtils;
+import utils.HDFSUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ public class MSATree {
             localPath = inputFile.substring(0, inputFile.lastIndexOf("/")+1);
             inputFile = inputFile.substring(inputFile.lastIndexOf("/")+1);
         }
-        MSAFileUtils utils = new MSAFileUtils();
+        HDFSUtils utils = new HDFSUtils();
         utils.clear_local_path(new File(localPath + "HPTree_OutPut"));
 
         System.out.println(">>(Local mode for tree) loading data ...");
         long startTime = System.currentTimeMillis();
-        FormatUtils formatUtils = new FormatUtils();
+        IOUtils formatUtils = new IOUtils();
         formatUtils.formatKVFasta(localPath + inputFile, localPath + "inputKV");
         int allNum = formatUtils.getAllNum();
         System.out.println("total number: " + allNum);

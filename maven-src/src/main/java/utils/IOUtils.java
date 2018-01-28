@@ -6,8 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class FormatUtils {
+public class IOUtils {
 	private List<String> s_key = new ArrayList<>();
 	private List<String> s_val = new ArrayList<>();
 	private int maxLength;
@@ -27,11 +28,6 @@ public class FormatUtils {
 
 	public List<String> getS_val() {
 		return s_val;
-	}
-
-
-	public static void main(String[] args) {
-		new FormatUtils().readFasta("/home/shixiang/genome.fasta", true);
 	}
 
 	public void readFasta(String input, boolean isDNA) {
@@ -74,6 +70,18 @@ public class FormatUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public List<Integer> deleteSimilarityOutput(List<String> in_key, List<String> in_val,
+                                                List<String> out_key, List<String> out_val) {
+        List<Integer> deleteIndex = new ArrayList<>();
+        for (int i=0; i<in_key.size(); i++) {
+            String outVal = out_val.get(i).replace("-", "");
+            if (in_key.get(i).equals(out_key.get(i)) && !in_val.get(i).equals(outVal)) {
+                deleteIndex.add(i);
+            }
+        }
+		return deleteIndex;
 	}
 
     public void formatKVFasta(String input, String output) {

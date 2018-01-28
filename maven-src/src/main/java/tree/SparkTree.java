@@ -6,8 +6,8 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
-import utils.FormatUtils;
-import utils.MSAFileUtils;
+import utils.IOUtils;
+import utils.HDFSUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -43,12 +43,12 @@ public class SparkTree {
             inputFile = inputFile.substring(inputFile.lastIndexOf("/")+1);
         }
 
-        MSAFileUtils utils = new MSAFileUtils();
+        HDFSUtils utils = new HDFSUtils();
         utils.clear_local_path(new File(localPath + "HPTree_OutPut"));
 
         System.out.println(">> (Spark mode for tree) loading data ...");
         long startTime = System.currentTimeMillis();
-        FormatUtils formatUtils = new FormatUtils();
+        IOUtils formatUtils = new IOUtils();
         formatUtils.formatKVFasta(localPath + inputFile, localPath + "inputKV");
         int allNum = formatUtils.getAllNum();
         System.out.println("total number: " + allNum);

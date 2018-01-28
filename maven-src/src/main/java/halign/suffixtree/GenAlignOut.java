@@ -1,4 +1,4 @@
-package halign.suffix;
+package halign.suffixtree;
 
 public class GenAlignOut {
 	public String get_every_sequeces(String center_re,String pi,int n,String center,int center_len,int[] Space,int[] Spaceevery,int[]Spaceother){

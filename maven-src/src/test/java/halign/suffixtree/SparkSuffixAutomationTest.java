@@ -1,20 +1,15 @@
-package halign.suffix;
+package halign.suffixtree;
 
-import halign.centerstar.MatrixMSA;
-import halign.centerstar.TreeMSA;
-import halign.kband.KbandMSA;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import halign.suffixautomation.SparkSuffixAutomation;
 
-import java.io.IOException;
-
 public class SparkSuffixAutomationTest {
     public static void main(String[] args) {
 
-        String inputKVFile = "E:\\myProgram\\intellij\\HAlign-II\\example\\genome.fasta";
-        String outputFile = "E:\\myProgram\\intellij\\HAlign-II\\example\\genomeSpark.fasta";
-        String outputFile2 = "E:\\myProgram\\intellij\\HAlign-II\\example\\genomeSpark2.fasta";
+        String inputKVFile = "E:\\myProgram\\intellij\\HAlign-II\\example\\BB11001.tfa";
+        String outputFile = "E:\\myProgram\\intellij\\HAlign-II\\example\\BB11001";
+        //String outputFile2 = "E:\\myProgram\\intellij\\HAlign-II\\example\\genomeSpark2.fasta";
 
         SparkConf conf = new SparkConf().setAppName("SparkSuffixAutomation");
         conf.setMaster("local[16]");

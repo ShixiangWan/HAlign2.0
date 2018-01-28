@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import halign.suffix.ExtremeMSA;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -17,7 +16,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import utils.MSAFileUtils;
+import utils.HDFSUtils;
 
 public class TreeMSA {
 	private static String Pi[]; // 记录每一个序列
@@ -39,7 +38,7 @@ public class TreeMSA {
 			Pi = new String[n];
 			Piname = new String[n];
 			System.out.println(">>Clearing HDFS Path & uploading ...");
-            MSAFileUtils MSAFileUtils = new MSAFileUtils();
+            HDFSUtils MSAFileUtils = new HDFSUtils();
             MSAFileUtils.clear_dfs_path(outputDFS);
 			MSAFileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
 			
@@ -47,7 +46,7 @@ public class TreeMSA {
 			Configuration conf = new Configuration();
 			conf.set("mapred.task.timeout", "0");
             Job job = Job.getInstance(conf, "msa_tree");
-			job.setJarByClass(ExtremeMSA.class);
+			job.setJarByClass(TreeMSA.class);
 			job.setInputFormatClass(TextInputFormat.class);
 			job.setMapperClass(TreeMapper.class);
 			job.setMapOutputKeyClass(NullWritable.class);

@@ -5,8 +5,8 @@ import org.apache.spark.api.java.JavaSparkContext;
 
 public class SparkProteinMSATest {
     public static void main(String[] args) {
-        String inputFile = "D:\\MASTER2016\\1.MSA2.0\\data\\smithwaterman.fasta";
-        String outputFile = "D:\\MASTER2016\\1.MSA2.0\\data\\proteinSpark.fasta";
+        String inputFile = "E:\\myProgram\\intellij\\HAlign-II\\example\\BB11001.tfa";
+        String outputFile = "E:\\myProgram\\intellij\\HAlign-II\\example\\BB11001-protein.fasta";
 
         SparkConf conf = new SparkConf().setAppName("SparkProteinMSA");
         conf.setMaster("local[16]");

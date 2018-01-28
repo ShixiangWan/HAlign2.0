@@ -8,7 +8,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-public class MSAFileUtils {
+public class HDFSUtils {
 	public void local_to_dfs(String local_file, String dfs_file) {
 		try {
 			Configuration conf = new Configuration();

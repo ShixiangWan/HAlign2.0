@@ -1,4 +1,4 @@
-package halign.suffix;
+package halign.suffixtree;
 
 public class DNAPairAlign {
     String center;

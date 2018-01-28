@@ -5,7 +5,6 @@ import jaligner.Sequence;
 import jaligner.SmithWatermanGotoh;
 import jaligner.matrix.MatrixLoader;
 import jaligner.util.SequenceParser;
-import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -14,7 +13,7 @@ import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
 import scala.Tuple2;
-import utils.FormatUtils;
+import utils.IOUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -27,9 +26,7 @@ import java.util.List;
  * @author ShixiangWan
  * */
 public class SparkProteinMSA {
-
-    private static Logger logger = Logger.getLogger(SparkProteinMSA.class);
-
+    
     /**
      * Run multiple sequence alignment.
      *
@@ -38,10 +35,10 @@ public class SparkProteinMSA {
      * @param outputFile output file "path+name", fasta format.
      * */
     public void start(JavaSparkContext jsc, String inputFile, String outputFile) {
-        logger.info("(Spark mode for Protein) Loading data ... " + inputFile);
+        System.out.println("(Spark mode for Protein) Loading data ... " + inputFile);
 
         long startTime = System.currentTimeMillis();
-        FormatUtils formatUtils = new FormatUtils();
+        IOUtils formatUtils = new IOUtils();
         formatUtils.readFasta(inputFile, false);
         List<String> fastaKeyList = formatUtils.getS_key();
         List<String> fastaValList = formatUtils.getS_val();
@@ -53,16 +50,20 @@ public class SparkProteinMSA {
         fastaKeyJavaRDD = fastaKeyJavaRDD.coalesce(2, true);
 
         /*generate map: out2 -> out1 */
-        logger.info("MultiThread MSA ... ");
+        System.out.println("MultiThread MSA ... ");
         int firstValLen1 = firstVal.length() + 1;
         final Broadcast<String> fastaFirstValBC = jsc.broadcast(firstVal);
         /*key is not changed, but value is calculated as int[] contains spaces*/
         JavaPairRDD<String, int[]> fastaMSADataJavaPairRDD = fastaDataJavaPairRDD.mapToPair(
                 (PairFunction<Tuple2<String, String>, String, String>) stringTuple2 -> {
-                    Sequence s1 = SequenceParser.parse(fastaFirstValBC.getValue());
-                    Sequence s2 = SequenceParser.parse(stringTuple2._2);
-                    Alignment alignment = SmithWatermanGotoh.align(s1, s2, MatrixLoader.load("BLOSUM80"), 10f, 0.5f);
-                    return new Tuple2<>(new String(alignment.getSequence2()), new String(alignment.getSequence1()));
+                    Sequence s1 = SequenceParser.parse("A" + fastaFirstValBC.getValue()+ "A");
+                    Sequence s2 = SequenceParser.parse("A" + stringTuple2._2+ "A");
+                    Alignment alignment = SmithWatermanGotoh.align(s1, s2, MatrixLoader.load("BLOSUM80"), 0f, 0f);
+                    String o1 = new String(alignment.getSequence1());
+                    String o2 = new String(alignment.getSequence2());
+                    o1 = o1.substring(1, o1.length()-1);
+                    o2 = o2.substring(1, o2.length()-1);
+                    return new Tuple2<>(o2, o1);
                 }).mapValues(
                 (Function<String, int[]>) stringTuple2 -> {
                     int index = 0;
@@ -75,12 +76,10 @@ public class SparkProteinMSA {
                 });
         fastaMSADataJavaPairRDD = fastaMSADataJavaPairRDD.coalesce(2, true);
         int firstSpaceArray[] = fastaMSADataJavaPairRDD.values().reduce(
-                (Function2<int[], int[], int[]>) (integer, integer2) -> {
-                    for (int i = 0; i < integer2.length; i++) {
-                        int int2 = integer2[i];
-                        if (integer[i] < int2) integer[i] = int2;
-                    }
-                    return integer;
+                (Function2<int[], int[], int[]>) (int1, int2) -> {
+                    for (int i = 0; i < int2.length; i++)
+                        if (int1[i] < int2[i]) int1[i] = int2[i];
+                    return int1;
                 });
         String firstVal0 = firstVal;
         /*calculate the first sequence: firstVal0*/
@@ -89,14 +88,15 @@ public class SparkProteinMSA {
             for (int j = 0; j < firstSpaceArray[i]; j++) stringBuilder.append('-');
             if (i != firstValLen1 - 1) stringBuilder.append(firstVal0.charAt(i));
         }
+        /* bug fixed.
         int lastNum = firstSpaceArray[firstSpaceArray.length - 1];
         for (int i = 0; i < lastNum; i++)
-            stringBuilder = stringBuilder.append('-');
+            stringBuilder = stringBuilder.append('-');*/
         firstVal0 = stringBuilder.toString();
         System.out.println((System.currentTimeMillis() - startTime) + "ms");
 
         /*merge msa out*/
-        logger.info("Converting results ... ");
+        System.out.println("Converting results ... ");
         final String firstValFinal = firstVal0;
         JavaRDD<String> fastaMSAOutJavaRDD = fastaMSADataJavaPairRDD.map(
                 (Function<Tuple2<String, int[]>, String>) stringTuple2 -> {
@@ -106,7 +106,8 @@ public class SparkProteinMSA {
                     int pos = 0;
                     for (int j = 0; j < firstValLen1; j++) {
                         int gap = firstSpaceArray[j] - spaces[j];
-                        pos += spaces[j];
+                        // bug fixed.
+                        //pos += spaces[j];
                         if (gap > 0) {
                             if (pos < line.length()) {
                                 /*normal*/
@@ -135,7 +136,7 @@ public class SparkProteinMSA {
 
         System.out.println((System.currentTimeMillis() - startTime) + "ms");
 
-        logger.info("Saving final results ... ");
+        System.out.println("Saving final results ... ");
         List<Tuple2<String, String>> outDataList = fastaKeyJavaRDD.zip(fastaMSAOutJavaRDD).collect();
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputFile));

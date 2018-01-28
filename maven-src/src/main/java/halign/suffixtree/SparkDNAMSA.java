@@ -1,7 +1,5 @@
-package halign.suffix;
+package halign.suffixtree;
 
-import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -10,8 +8,8 @@ import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
 import scala.Tuple2;
-import utils.FormatUtils;
-import utils.MSAFileUtils;
+import utils.IOUtils;
+import utils.HDFSUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -21,14 +19,12 @@ import java.util.List;
 
 public class SparkDNAMSA {
 
-    private static Logger logger = Logger.getLogger(SparkDNAMSA.class);
-
     public void start(JavaSparkContext jsc, String inputKVFile, String outputfile) {
 
-        logger.info("(Spark mode for DNA) Loading data ... " + inputKVFile);
+        System.out.println("(Spark mode for DNA) Loading data ... " + inputKVFile);
 
         long start = System.currentTimeMillis();
-        FormatUtils formatUtils = new FormatUtils();
+        IOUtils formatUtils = new IOUtils();
         formatUtils.readFasta(inputKVFile, true);
         int allNum = formatUtils.getAllNum();
         int maxLength = formatUtils.getMaxLength();
@@ -36,8 +32,8 @@ public class SparkDNAMSA {
         List<String> fastaValList = formatUtils.getS_val();
         final String firstVal = fastaValList.get(0);
 
-        logger.info((System.currentTimeMillis() - start) + "ms");
-        logger.info("MultiThread MSA ... ");
+        System.out.println((System.currentTimeMillis() - start) + "ms");
+        System.out.println("MultiThread MSA ... ");
 
         SuffixTree suffixTree = new SuffixTree();
         suffixTree.build(firstVal + "$");
@@ -71,9 +67,10 @@ public class SparkDNAMSA {
             for (int j = 0; j < firstSpaceArray[i]; j++) stringBuilder.append('-');
             if (i != firstValLen - 1) stringBuilder.append(firstVal0.charAt(i));
         }
+        /* bug fixed.
         int lastNum = firstSpaceArray[firstSpaceArray.length - 1];
         for (int i = 0; i < lastNum; i++)
-            stringBuilder = stringBuilder.append('-');
+            stringBuilder = stringBuilder.append('-');*/
         firstVal0 = stringBuilder.toString();
         System.out.println((System.currentTimeMillis() - start) + "ms");
 
@@ -96,7 +93,7 @@ public class SparkDNAMSA {
 
 
         System.out.println(">>Saving final results ... ");
-        new MSAFileUtils().clear_local_path(new File(outputfile));
+        new HDFSUtils().clear_local_path(new File(outputfile));
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(outputfile));
             for (int i = 0; i < allNum; i++) {

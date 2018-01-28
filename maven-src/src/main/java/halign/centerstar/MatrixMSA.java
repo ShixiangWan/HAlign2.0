@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import halign.suffix.ExtremeMSA;
+import halign.suffixtree.ExtremeMSA;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
@@ -17,7 +17,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import utils.MSAFileUtils;
+import utils.HDFSUtils;
 
 public class MatrixMSA {
     private String filepath = "";  //记录文件名称
@@ -40,7 +40,7 @@ public class MatrixMSA {
 			Pi = new String[n];
 			Piname = new String[n];
 			System.out.println(">>Clearing HDFS Path & uploading ...");
-            MSAFileUtils MSAFileUtils = new MSAFileUtils();
+            HDFSUtils MSAFileUtils = new HDFSUtils();
             MSAFileUtils.clear_dfs_path(outputDFS);
 			MSAFileUtils.local_to_dfs(inputfile, outputDFS + "/input/input.txt");
 			

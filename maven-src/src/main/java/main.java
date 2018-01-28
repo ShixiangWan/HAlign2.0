@@ -1,9 +1,9 @@
 import halign.centerstar.MatrixMSA;
 import halign.centerstar.TreeMSA;
-import halign.suffix.ExtremeMSA;
-import halign.suffix.SparkDNAMSA;
+import halign.suffixtree.ExtremeMSA;
+import halign.suffixtree.SparkDNAMSA;
 import halign.kband.KbandMSA;
-import halign.smithwaterman.ProteinMSA;
+import halign.smithwaterman.LocalProteinMSA;
 import halign.smithwaterman.SparkProteinMSA;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -14,8 +14,6 @@ import tree.SparkTree;
 import java.util.Objects;
 
 public class main {
-
-    private static Logger logger = Logger.getLogger(main.class);
 
     public static void main(String[] args)  {
         long start = System.currentTimeMillis();
@@ -34,29 +32,29 @@ public class main {
                 method = Integer.parseInt(args[3]);
                 switch (method) {
                     case 0:
-                        logger.info("Running suffix tree alignment as single mode");
+                        System.out.println("Running suffix alignment as single mode");
                         new ExtremeMSA().start(inputFile, outputFile, null);
                         break;
                     case 1:
-                        logger.info("Running smithwaterman alignment as single mode");
-                        new ProteinMSA().start(inputFile, outputFile);
+                        System.out.println("Running smithwaterman alignment as single mode");
+                        new LocalProteinMSA().start(inputFile, outputFile);
                         break;
                     case 2:
-                        logger.info("Running kband alignment as single mode");
+                        System.out.println("Running kband alignment as single mode");
                         new KbandMSA().start(inputFile, outputFile, null);
                         break;
                     case 3:
-                        logger.info("Running trie tree alignment as single mode");
+                        System.out.println("Running trie tree alignment as single mode");
                         new TreeMSA().start(inputFile, outputFile, null);
                         break;
                     case 4:
-                        logger.info("Running similarity matrix alignment as single mode");
+                        System.out.println("Running similarity matrix alignment as single mode");
                         new MatrixMSA().start(inputFile, outputFile, null);
                         break;
                 }
                 long end = System.currentTimeMillis();
-                logger.info("Cost time: "+(end - start)+"ms");
-                logger.info("Successfully! The result is saved as: "+outputFile);
+                System.out.println("Cost time: "+(end - start)+"ms");
+                System.out.println("Successfully! The result is saved as: "+outputFile);
             } else if (Objects.equals(args[0], "-hadoopMSA")) { //Hadoop mode
                 inputFile = args[1];
                 outputFile = args[2];
@@ -64,36 +62,36 @@ public class main {
                 method = Integer.parseInt(args[4]);
                 switch (method) {
                     case 0:
-                        logger.info("Running suffix tree alignment as hadoop mode");
+                        System.out.println("Running suffix tree alignment as hadoop mode");
                         new ExtremeMSA().start(inputFile, outputFile, outputDFS);
                         break;
                     case 1:
-                        logger.info("Sorry, smithwaterman alignment as hadoop mode had been canceled. " +
+                        System.out.println("Sorry, smithwaterman alignment as hadoop mode had been canceled. " +
                                 "You may use Spark mode instead.");
                         break;
                     case 2:
-                        logger.info("Running kband alignment as hadoop mode");
+                        System.out.println("Running kband alignment as hadoop mode");
                         new KbandMSA().start(inputFile, outputFile, outputDFS);
                         break;
                     case 3:
-                        logger.info("Running trie tree alignment as hadoop mode");
+                        System.out.println("Running trie tree alignment as hadoop mode");
                         new TreeMSA().start(inputFile, outputFile, outputDFS);
                         break;
                     case 4:
-                        logger.info("Running similarity matrix alignment as hadoop mode");
+                        System.out.println("Running similarity matrix alignment as hadoop mode");
                         new MatrixMSA().start(inputFile, outputFile, outputDFS);
                         break;
                 }
                 long end = System.currentTimeMillis();
-                logger.info("Cost time: "+(end - start)+"ms");
-                logger.info("Successfully! The result is saved as: "+outputFile);
+                System.out.println("Cost time: "+(end - start)+"ms");
+                System.out.println("Successfully! The result is saved as: "+outputFile);
             } else if (Objects.equals(args[0], "-sparkMSA")) {
                 inputFile = args[1];
                 outputFile = args[2];
                 method = Integer.parseInt(args[3]);
                 switch (method) {
                     case 0:
-                        logger.info("Running suffix tree alignment as spark mode");
+                        System.out.println("Running suffix tree alignment as spark mode");
                         SparkConf conf = new SparkConf().setAppName("SparkSuffixAutomation");
                         conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
                         conf.set("spark.kryoserializer.buffer.max", "2000m");
@@ -103,7 +101,7 @@ public class main {
                         jsc.stop();
                         break;
                     case 1:
-                        logger.info("Running smithwaterman alignment as spark mode");
+                        System.out.println("Running smithwaterman alignment as spark mode");
                         conf = new SparkConf().setAppName("SparkProteinMSA");
                         conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
                         conf.set("spark.kryoserializer.buffer.max", "2000m");
@@ -114,20 +112,20 @@ public class main {
                         break;
                 }
                 long end = System.currentTimeMillis();
-                logger.info("Cost time: "+(end - start)+"ms");
-                logger.info("Successfully! The result is saved as: "+outputFile);
+                System.out.println("Cost time: "+(end - start)+"ms");
+                System.out.println("Successfully! The result is saved as: "+outputFile);
             } else if (Objects.equals(args[0], "-localTree")) {
                 inputFile = args[1];
                 outputFile = args[2];
-                logger.info("Generating phylogenetic trees as local mode");
+                System.out.println("Generating phylogenetic trees as local mode");
                 new MSATree().start(inputFile, outputFile);
                 long end = System.currentTimeMillis();
-                logger.info("Cost time: "+(end - start)+"ms");
-                logger.info("Successfully! The result is saved as: "+outputFile);
+                System.out.println("Cost time: "+(end - start)+"ms");
+                System.out.println("Successfully! The result is saved as: "+outputFile);
             } else if (Objects.equals(args[0], "-sparkTree")) {
                 inputFile = args[1];
                 outputFile = args[2];
-                logger.info("Generating phylogenetic trees as spark mode");
+                System.out.println("Generating phylogenetic trees as spark mode");
                 SparkConf conf = new SparkConf().setAppName("SparkMSATree");
                 conf.setMaster("local[16]");
                 conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
