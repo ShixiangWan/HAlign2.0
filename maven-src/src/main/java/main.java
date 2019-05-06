@@ -1,11 +1,10 @@
 import halign.centerstar.MatrixMSA;
 import halign.centerstar.TreeMSA;
+import halign.kband.KbandMSA;
 import halign.suffixtree.ExtremeMSA;
 import halign.suffixtree.SparkDNAMSA;
-import halign.kband.KbandMSA;
 import halign.smithwaterman.LocalProteinMSA;
 import halign.smithwaterman.SparkProteinMSA;
-import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import tree.MSATree;

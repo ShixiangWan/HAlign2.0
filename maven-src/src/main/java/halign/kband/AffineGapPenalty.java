@@ -54,7 +54,7 @@ public class AffineGapPenalty {//完成数组，a,b,c,p的初始化
                 b[i][j]=min;
             }
         }
-        for (int j=0;j<K-k;j++)
+        for (int j=0;j<K-k && 0<m && j+k<K;j++)
             b[0][j+k]=-(h+g*j);
     }
 
@@ -66,7 +66,7 @@ public class AffineGapPenalty {//完成数组，a,b,c,p的初始化
             }
         }
 
-        for (int i=1;i<=k;i++)
+        for (int i=1;i<=k && i<m && k-i<K;i++)
             c[i][0+k-i]=-(h+g*i);
 
     }

@@ -60,6 +60,7 @@ public class ExtremeMSA {
 		}
 		
 		center = centerAlignEachOne(); // center的值固定为0，即第一条序列
+		//center = 2;
 		Spacecenter = new int[n][Pi[center].length() + 1];// 存放中心序列分别与其他序列比对时增加的空格的位置
         Spaceother = new int[n][computeMaxLength(center) + 1];// 存放其他序列与中心序列比对时增加的空格的位置
         for (int i = 0; i < n; i++) {
@@ -75,10 +76,20 @@ public class ExtremeMSA {
         output(Space, outputfile);
 	}
 
+	// 获取合法的子字符串
+	private String getSubstring(String string, int start, int end)
+	{
+		if (start >= 0 && start <= end && end <= string.length())
+			return string.substring(start, end);
+		return string;
+	}
+
     // 比对Pi[i]与中心序列有重合的前端
     private void prealign(int i) {
-        String strC = Pi[center].substring(0, Name[center][i][0][0]);
-        String stri = Pi[i].substring(0, Name[center][i][1][0]);
+        /*String strC = Pi[center].substring(0, Name[center][i][0][0]);
+        String stri = Pi[i].substring(0, Name[center][i][1][0]);*/
+		String strC = (Name[center][i][0].length > 0) ? getSubstring(Pi[center], 0, Name[center][i][0][0]) : Pi[center];
+		String stri = (Name[center][i][0].length > 0) ? getSubstring(Pi[i], 0, Name[center][i][1][0]) : Pi[center];
         int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
         traceBackForDynamicProgram(M, stri.length(), strC.length(), i, 0, 0);// 回溯，更改空格数组
     }
@@ -94,14 +105,20 @@ public class ExtremeMSA {
             Name[center][i][2][j] -= lamda;
         }
         if (Name[center][i][2][j] < 0)
-            System.out.println("此处有错误！！！！");
+		{
+			//System.out.println("此处有错误！！！！"); 已解决
+			Name[center][i][2][j] = 0;
+		}
 
-        String strC = Pi[center].substring(Name[center][i][0][j - 1] + Name[center][i][2][j - 1],
-                Name[center][i][0][j]);// 此处有漏洞，如果Name[centerstar][i][0][0]=0，会抱错
 
-        String stri = Pi[i].substring(Name[center][i][1][j - 1] + Name[center][i][2][j - 1], Name[center][i][1][j]);
+		/*String strC = Pi[center].substring(Name[center][i][0][j - 1] + Name[center][i][2][j - 1],
+				Name[center][i][0][j]);
+		String stri = Pi[i].substring(Name[center][i][1][j - 1] + Name[center][i][2][j - 1], Name[center][i][1][j]);*/
+		String strC = (Name[center][i][0].length > 0) ? getSubstring(Pi[center], Name[center][i][0][j - 1] + Name[center][i][2][j - 1],
+				Name[center][i][0][j]) : "";
+		String stri = (Name[center][i][0].length > 0) ? getSubstring(Pi[i], Name[center][i][1][j - 1] + Name[center][i][2][j - 1], Name[center][i][1][j]) : "";
 
-        int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
+		int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
         traceBackForDynamicProgram(M, stri.length(), strC.length(), i,
                 Name[center][i][1][j - 1] + Name[center][i][2][j - 1],
                 Name[center][i][0][j - 1] + Name[center][i][2][j - 1]);
@@ -119,8 +136,10 @@ public class ExtremeMSA {
             if (istart > Pi[i].length())
                 istart--;
 
-            String strC = Pi[center].substring(cstart);
-            String stri = Pi[i].substring(Name[center][i][1][j - 1] + Name[center][i][2][j - 1]);
+            //String strC = Pi[center].substring(cstart);
+            //String stri = Pi[i].substring(Name[center][i][1][j - 1] + Name[center][i][2][j - 1]);
+			String strC = getSubstring(Pi[center], cstart, Pi[center].length());
+			String stri = getSubstring(Pi[i], Name[center][i][1][j - 1] + Name[center][i][2][j - 1], Pi[i].length());
             int M[][] = computeScoreMatrixForDynamicProgram(stri, strC);// 动态规划矩阵计算完毕
             traceBackForDynamicProgram(M, stri.length(), strC.length(), i,istart,cstart);
         } else {
@@ -207,8 +226,9 @@ public class ExtremeMSA {
     }
 
 	public int centerAlignEachOne() {
-		Name = new int[n][n][3][]; // 用来存放出现的名字，Name[i][j][0][k]和Name[i][j][1][k]表示了Pi[i]序列的第Name[i][j][0][k]个片段出现在Pi[j]序列的Name[i][j][1][k]位置上
-		SuffixTree st1 = new SuffixTree();
+		// 用来存放出现的名字，Name[i][j][0][k]和Name[i][j][1][k]表示了Pi[i]序列的第Name[i][j][0][k]个片段出现在Pi[j]序列的Name[i][j][1][k]位置上
+        Name = new int[n][n][3][];
+        SuffixTree st1 = new SuffixTree();
 		st1.build(Pi[0] + "$");
 		for (int j = 1; j < n; j++) {
 			int index = 0;
@@ -393,17 +413,31 @@ public class ExtremeMSA {
 		// ---------其他序列输出完毕-----
 		// ---------输出结束--------------
 	}
-	
-	public static class ExtremeMapper extends Mapper<Object, Text, NullWritable, Text> {
-		int count = 0;
-		public void map(Object key, Text value, Context context) throws IOException, InterruptedException{
-			if (value.charAt(0) == '>') {
-				Piname[count] = value.toString();
-			} else {
-				Pi[count] = value.toString();
-				count++;
-			}
-			context.write(NullWritable.get(), value);
-		}
-	}
+
+    public static class ExtremeMapper extends Mapper<Object, Text, NullWritable, Text> {
+        int count = -1;
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException{
+            if (value.charAt(0) == '>') {
+                count++;
+                Piname[count] = value.toString();
+            } else {
+                Pi[count] = Pi[count] == null ? value.toString() : Pi[count] + value.toString();
+            }
+            context.write(NullWritable.get(), value);
+        }
+    }
+
+//	public static class ExtremeMapper extends Mapper<Object, Text, NullWritable, Text> {
+//		int count = 0;
+//		public void map(Object key, Text value, Context context) throws IOException, InterruptedException{
+//			if (value.charAt(0) == '>') {
+//				Piname[count] = value.toString();
+//			} else {
+//				System.out.println("value:  "+value);
+//				Pi[count] = value.toString();
+//				count++;
+//			}
+//			context.write(NullWritable.get(), value);
+//		}
+//	}
 }

@@ -567,7 +567,6 @@ public class SuffixTree {
 					if(tmp<mindis){
 						mindis=tmp;
 						pos_j=startpos[j].intValue();
-
 					}
 				}
 
