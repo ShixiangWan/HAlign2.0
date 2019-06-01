@@ -6,7 +6,11 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5a8f3bbd-8802-4e60-b688-0ab395deb8a4" name="Default Changelist" comment="" />
+    <list default="true" id="5a8f3bbd-8802-4e60-b688-0ab395deb8a4" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/halign/kband/AffineGapPenalty.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/halign/kband/AffineGapPenalty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,66 +32,19 @@
     <expand />
     <select />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-1055758465">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="class" value="2" />
-          <entry key="java" value="15" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="CLASS" value="2" />
-          <entry key="JAVA" value="15" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="java" value="354" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="354" />
-        </counts>
-      </usages-collector>
-    </session>
+  <component name="DefaultGradleProjectSettings">
+    <option name="isMigrated" value="true" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="HAlign-II" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3914">
-              <caret line="223" column="53" selection-start-line="223" selection-start-column="53" selection-end-line="223" selection-end-column="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7657">
-              <caret line="420" column="24" selection-start-line="420" selection-start-column="24" selection-end-line="420" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="874">
-              <caret line="58" column="37" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
+            <state relative-caret-position="208">
+              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -95,32 +52,47 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/halign/smithwaterman/SparkProteinMSA.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/halign/suffixtree/ExtremeMSATest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>TreeMSA</find>
+      <find>treemsa</find>
+      <find>num</find>
+      <find>漏洞</find>
+      <find>错</find>
+      <find>s_out1</find>
+      <find>deleted sequences</find>
+      <find>delete</find>
+      <find>&gt;</find>
+      <find>'&gt;'</find>
+    </findStrings>
+    <dirStrings>
+      <dir>C:\Users\J. Chao\source\IdeaProjects\HAlign-II\src\main</dir>
+      <dir>C:\Users\J. Chao\source\IdeaProjects\HAlign-II\src\main\java</dir>
+      <dir>C:\Users\J. Chao\source\IdeaProjects\HAlign-II\src\main\java\halign\kband</dir>
+      <dir>C:\Users\J. Chao\source\IdeaProjects\HAlign-II\src</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java" />
-        <option value="$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java" />
         <option value="$PROJECT_DIR$/src/test/java/halign/suffixtree/ExtremeMSATest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/jaligner/ui/filechooser/FileChooserJNLP.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/centerstar/NewRoot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/centerstar/TreeMSA.java" />
+        <option value="$PROJECT_DIR$/src/main/java/utils/IOUtils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/kband/AffineGapPenalty.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/kband/KbandAlignTwo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/kband/KbandMake.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java" />
+        <option value="$PROJECT_DIR$/src/main/java/main.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/centerstar/BuildTree.java" />
+        <option value="$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java" />
       </list>
     </option>
   </component>
@@ -147,17 +119,17 @@
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
           <item name="malab" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
       </expand>
       <select />
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="260" />
-    <option name="y" value="20" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
+    <option name="x" value="-10" />
+    <option name="y" value="-10" />
+    <option name="width" value="1940" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -180,37 +152,28 @@
               <item name="HAlign-II" type="b2602c69:ProjectViewProjectNode" />
               <item name="HAlign-II" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="HAlign-II" type="b2602c69:ProjectViewProjectNode" />
               <item name="HAlign-II" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="HAlign-II" type="b2602c69:ProjectViewProjectNode" />
               <item name="HAlign-II" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="halign" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="HAlign-II" type="b2602c69:ProjectViewProjectNode" />
-              <item name="HAlign-II" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="halign" type="462c0819:PsiDirectoryNode" />
-              <item name="smithwaterman" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="HAlign-II" type="b2602c69:ProjectViewProjectNode" />
               <item name="HAlign-II" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="halign" type="462c0819:PsiDirectoryNode" />
               <item name="suffixtree" type="462c0819:PsiDirectoryNode" />
@@ -220,32 +183,26 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="HAlign-II" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="malab" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="GenerateAntBuildDialog.backupFiles" value="true" />
     <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="halign-ii" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1545365177716" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../HAlignWeb" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="last_opened_file_path" value="E:/201905debug/2.0" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="project.structure.side.proportion" value="0.21954022" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -259,7 +216,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ExtremeMSATest">
+  <component name="RunManager" selected="Application.main">
     <configuration name="ExtremeMSATest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="halign.suffixtree.ExtremeMSATest" />
       <module name="malab" />
@@ -274,22 +231,23 @@
       </method>
     </configuration>
     <configuration name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8_oracle" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="main" />
       <module name="malab" />
+      <option name="PROGRAM_PARAMETERS" value="-localMSA E:\201905debug\test\0.fasta E:\201905debug\test\1.fasta 2" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.main" />
       <item itemvalue="Application.ExtremeMSATest" />
+      <item itemvalue="Application.main" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.ExtremeMSATest" />
         <item itemvalue="Application.main" />
+        <item itemvalue="Application.ExtremeMSATest" />
       </list>
     </recent_temporary>
   </component>
@@ -312,26 +270,36 @@
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="11271000" />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20978552" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49853373" visible="true" weight="0.24865952" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="UI Designer" order="4" />
-      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info id="Favorites" order="5" sideWeight="0.5014663" side_tool="true" weight="0.31032172" />
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3286119" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39943343" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.329429" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49932975" weight="0.32697946" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39824304" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="9" weight="0.3286119" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49798927" weight="0.32844576" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49932975" weight="0.32844576" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50067025" side_tool="true" weight="0.32844576" />
+      <window_info anchor="bottom" id="Messages" order="9" sideWeight="0.49798927" weight="0.32796487" />
       <window_info anchor="bottom" id="Java Enterprise" order="10" />
       <window_info anchor="bottom" id="Database Changes" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="12" show_stripe_button="false" />
@@ -345,26 +313,17 @@
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info anchor="right" id="Bean Validation" order="9" weight="0.3297587" />
+      <window_info anchor="right" id="Maven" order="10" weight="0.3297587" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/SparkDNAMSA.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="50" column="77" selection-start-line="50" selection-start-column="77" selection-end-line="50" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/tree/OnBalance.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -393,62 +352,239 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-mapreduce-client-common/2.7.1/hadoop-mapreduce-client-common-2.7.1.jar!/org/apache/hadoop/mapred/LocalJobRunner.class">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-mapreduce-client-common/2.7.1/hadoop-mapreduce-client-common-2.7.1.jar!/org/apache/hadoop/mapred/LocalJobRunner.class" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/jaligner/Markups.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="206" selection-start-line="206" selection-end-line="206" />
+        <state relative-caret-position="160">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-mapreduce-client-core/2.7.1/hadoop-mapreduce-client-core-2.7.1.jar!/org/apache/hadoop/mapreduce/Mapper.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/smithwaterman/SparkProteinMSA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="320">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/HDFSUtils.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/jaligner/ui/filechooser/FileChooserFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-76">
-          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+        <state relative-caret-position="192">
+          <caret line="28" column="13" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/jaligner/ui/filechooser/FileChooserException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3914">
-          <caret line="223" column="53" selection-start-line="223" selection-start-column="53" selection-end-line="223" selection-end-column="53" />
+        <state relative-caret-position="160">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/jaligner/ui/filechooser/FileChooser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7657">
-          <caret line="420" column="24" selection-start-line="420" selection-start-column="24" selection-end-line="420" selection-end-column="24" />
+        <state relative-caret-position="192">
+          <caret line="28" column="22" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/smithwaterman/LocalProteinMSA.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="874">
-          <caret line="58" column="37" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
+        <state relative-caret-position="144">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/halign/smithwaterman/SparkProteinMSA.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/hadoop/hadoop-mapreduce-client-core/2.7.1/hadoop-mapreduce-client-core-2.7.1.jar!/org/apache/hadoop/mapreduce/Mapper.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        <state relative-caret-position="240">
+          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/centerstar/Queue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-279">
+          <caret line="18" column="7" lean-forward="true" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_211/src.zip!/java/lang/String.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/centerstar/NewRoot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
+          <folding>
+            <element signature="e#224#234#0" expanded="true" />
+            <element signature="e#336#345#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/centerstar/TreeMSA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="63" column="66" lean-forward="true" selection-start-line="63" selection-start-column="66" selection-end-line="63" selection-end-column="66" />
+          <folding>
+            <element signature="e#1224#2129#1" />
+            <element signature="method#input#0;class#TreeMSA#0" />
+            <element signature="method#format#0;class#TreeMSA#0" />
+            <element signature="method#findNumMax#0;class#TreeMSA#0" />
+            <element signature="method#scoreMatrix#0;class#TreeMSA#0" />
+            <element signature="method#traceBack#0;class#TreeMSA#0" />
+            <element signature="method#combine#0;class#TreeMSA#0" />
+            <element signature="method#count#0;class#TreeMSA#0" />
+            <element signature="method#maxLength#0;class#TreeMSA#0" />
+            <element signature="method#output#0;class#TreeMSA#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/HDFSUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="11" column="16" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/kband/AffineGapPenalty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1168">
+          <caret line="73" column="15" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/kband/KbandMake.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/kband/KbandMSA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
+          <folding>
+            <element signature="e#1673#2688#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/kband/KbandAlignTwo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="26" column="12" lean-forward="true" selection-start-line="26" selection-start-column="12" selection-end-line="26" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/IOUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixautomation/SparkSuffixAutomation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="66" lean-forward="true" selection-start-line="66" selection-end-line="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/SparkDNAMSA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="50" column="77" selection-start-line="50" selection-start-column="77" selection-end-line="50" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/HAlign-II.iml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jaligner/ui/clipboard/ClipboardHandlerJNLP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/jaligner/ui/filechooser/FileChooserJNLP.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="43" column="7" lean-forward="true" selection-start-line="43" selection-start-column="7" selection-end-line="43" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/AlignSubstring.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/DNAPairAlign.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/halign/suffixtree/ExtremeMSATest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+        <state relative-caret-position="240">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/centerstar/BuildTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/SuffixTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="248" column="12" selection-start-line="248" selection-start-column="12" selection-end-line="248" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/halign/suffixtree/ExtremeMSA.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="228" lean-forward="true" selection-start-line="228" selection-end-line="228" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1289#2207#1" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -462,8 +598,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
-                <option value="0.5" />
+                <option value="0.21954022" />
               </list>
             </option>
           </splitter-proportions>
@@ -486,7 +621,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.21954022" />
               </list>
             </option>
           </splitter-proportions>
@@ -494,11 +629,11 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.8</last-edited>
+          <last-edited>1.8_oracle</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.21954022" />
               </list>
             </option>
           </splitter-proportions>
@@ -510,8 +645,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
-                <option value="0.6" />
+                <option value="0.21954022" />
               </list>
             </option>
           </splitter-proportions>
@@ -523,7 +657,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.21954022" />
               </list>
             </option>
           </splitter-proportions>
